@@ -90,7 +90,7 @@ To run the application:
 npm start
 ```
 
-For building the application, consult <a href="https://www.electronjs.org/docs/latest/development/build-instructions-gn">Electron's build guide</a>. The compiled application should be placed in the `overlay` folder where you have Smash Soda installed.
+For building the application, consult <a href="https://www.electronjs.org/docs/latest/development/build-instructions-gn">Electron's build guide</a>. The compiled application should be placed in the `overlay` folder where you have Smash Soda installed. Smash Soda works from version 3.0 onwards.
 
 
 ## Contributing
