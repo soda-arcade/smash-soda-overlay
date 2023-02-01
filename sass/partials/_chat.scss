@@ -1,0 +1,65 @@
+#chat {
+    position: absolute;
+    color: #fff;
+    width: 100%;
+    max-width: 25vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+#chat-input {
+    background: $theme-bg;
+    color: $theme-text;
+    border: none;
+    outline: none;
+    padding: 8px 10px;
+    opacity: .9;
+    width: 100%;
+}
+
+#chat-input:focus {
+    opacity: 1;
+}
+
+#chat-messages {
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    opacity: .8;
+    align-items: flex-start;
+}
+
+.chat-message {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1vh;
+    background: rgba($color: $theme-bg, $alpha: .7);
+    padding: .5vh 1vh;
+}
+
+.chat-message:first-child {
+    padding-top: 1vh;
+}
+
+.chat-message:last-child {
+    padding-bottom: 1vh;
+}
+
+.chat-message-label {
+    font-weight: bold;
+    color: $theme-label;
+}
+
+.chat-message-value {
+    flex: 1;
+}
+
+.chat-message.log .chat-message-value {
+    color: $theme-label;
+    font-weight: bold;
+}
+
+.fade-out {
+    animation: fadeOut 1s;
+}

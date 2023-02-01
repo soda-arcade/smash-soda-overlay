@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">-->
     <link href="./css/app.css" rel="stylesheet">
     <title>Smash Soda Overlay</title>
 
@@ -13,20 +13,31 @@
 
     <div id="app">
 
-      <header id="app-header" class="app-bar">
-        <div id="app-bar-row" class="app-bar-row">
+      <header id="app-header" class="bar">
+        <div id="app-header-bar" class="bar-row">
         </div>
       </header>
 
-      <main id="app-main"></main>
+      <main id="app-main">
 
-      <footer id="app-footer"></footer>
+        <form id="chat" class="window left top" onsubmit="event.preventDefault(); chat.sendMessage();">
+          <input id="chat-input" type="text" onfocusout="chat.unfocus()">
+          <div id="chat-messages"></div>
+        </form>
 
+        <div id="viewports" class="active">
+          <div class="viewport-row"></div>
+          <div class="viewport-row"></div>
+        </div>
+
+      </main>
     </div>
 
     <!-- Smash Soda Overlay -->
     <script src="./app/modules/helpers.js"></script>
-    <script src="./app/modules/appbar.js"></script>
+    <script src="./app/modules/bar.js"></script>
+    <script src="./app/modules/viewport.js"></script>
+    <script src="./app/modules/chat.js"></script>
 
     <script src="./app/app.js"></script>
 

@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/electron/electron-quick-start/issues"
   },
-  "homepage": "https://github.com/electron/electron-quick-start#readme"
+  "homepage": "https://github.com/electron/electron-quick-start#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }

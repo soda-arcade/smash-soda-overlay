@@ -1,7 +1,7 @@
 /**
  * Helper functions
  *
- * @link       https://mickeyuk.github.io
+ * @link       https://mickeyuk.com
  * @since      1.0.0
  */
 function helper() { }

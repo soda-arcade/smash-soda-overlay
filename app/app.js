@@ -19,16 +19,35 @@ app.default = {
 app.cfg = { ...app.default };
 
 /**
- * Stores all the interval timers.
+ * Interval for the main loop.
  */
-app.timers = [];
+app.interval = null;
+
+/**
+ * Messages from the API.
+ */
+app.messages = [];
+
+/**
+ * The host guest.
+ */
+app.host;
 
 /**
  * Initializes the app.
  */
 app.init = function () {
     
+    // Get current configuration
+    // api.getCfg().then((data) => {
+
+    //     // Update the configuration
+    //     app.cfg = { ...app.cfg, ...data }; 
+
+    // });
     
+    // Application loop
+    app.interval = setInterval(app.update, 500);
 
 };
 
@@ -37,65 +56,46 @@ app.init = function () {
  */
 app.update = function () {
 
-    // Get current configuration
-    api.getCfg().then((data) => {
+    // Get messages from Smash Soda
+    api.getMessages().then((data) => {
 
-        // Update the configuration
-        app.cfg = { ...app.cfg, ...data };
+        // Add new messages
+        if (data != null && data.length > 0) {
+            data.forEach((message) => {
 
-        // Set overlay opacity
-        document.getElementById("app").style.opacity = app.cfg.overlay.opacity;
+                // Process message
+                switch (message.type) {
 
-        // Handle websocket messages
-        if (app.cfg.websocketMsg) {
-            app.handleMsg(app.cfg.websocketMsg);
-            app.cfg.websocketMsg = null;
+                    case 'host': // Tell the overlay who the host is
+                        app.host = message;
+                        break;
+
+                    default: // Assume it's a chat message
+                        app.messages.push(message);
+                        break;
+
+                }
+                
+            });
         }
 
     });
 
-};
+    // Toggle chat
+    api.toggleChat().then((data) => {
 
-app.handleMsg = function (msg) {
+        if (data) {
+            chat.inputEnable();
+        } else {
+            chat.inputDisable();
+        }
 
-    switch (msg.type) {
+    });
 
-        case 'appbar-add-section':
-
-            
-            
-            break;
-
-    }
+    // Update chat
+    chat.update();
 
 };
 
 // Start the app
-setInterval(app.update, 500);
-
-appBar.addSection({
-    id: 'appbar-section-1',
-    data: [
-        {
-            id: 'appbar-section-1-item-1',
-            label: "Hotseat",
-            value: "Enabled"
-        },
-        {
-            id: 'appbar-section-1-item-2',
-            label: "Playing",
-            value: "MickeyUK"
-        },
-        {
-            id: 'appbar-section-1-item-3',
-            label: "Next",
-            value: "bigboi83"
-        },
-        {
-            id: 'appbar-section-1-item-3',
-            label: "Time",
-            type: "timer",
-            value: 30000
-        },
-    ]
-});
+app.init();

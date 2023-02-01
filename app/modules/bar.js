@@ -1,7 +1,7 @@
 /**
  * Handles all the appbar stuff.
  *
- * @link       https://mickeyuk.github.io
+ * @link       https://mickeyuk.com
  * @since      1.0.0
  */
 function appBar() { }
@@ -23,26 +23,26 @@ appBar.update = function () {
  * 
  * @param {object} section  The section object. 
  */
-appBar.addSection = function (section) {
+appBar.addSection = function (barId, section) {
 
     // Abort if element for section already exists
     if (document.querySelector(`[data-id="${section.id}"]`)) return;
 
     // Create new element for the section
     let sectionElement = document.createElement("div");
-    sectionElement.classList.add("app-bar-section");
+    sectionElement.classList.add("bar-section");
     sectionElement.setAttribute("data-id", section.id);
     section.element = sectionElement;
 
     // Add the section to the app bar
-    document.getElementById("app-bar-row").appendChild(sectionElement);
+    document.getElementById(barId).appendChild(sectionElement);
 
     // For each data item in the section
     for (let i = 0; i < section.data.length; i++) {
 
         // Create new element for the data item
         let dataElement = document.createElement("div");
-        dataElement.classList.add("app-bar-col");
+        dataElement.classList.add("bar-col");
 
         // Add attribute to the data element
         dataElement.setAttribute("data-id", section.data[i].id);
@@ -52,7 +52,7 @@ appBar.addSection = function (section) {
 
         // Create data label element
         let dataLabel = document.createElement("div");
-        dataLabel.classList.add("app-bar-label");
+        dataLabel.classList.add("bar-label");
         dataLabel.innerHTML = section.data[i].label;
 
         // Add the data label to the data element
@@ -60,7 +60,7 @@ appBar.addSection = function (section) {
 
         // Create data value element
         let dataValue = document.createElement("div");
-        dataValue.classList.add("app-bar-value");
+        dataValue.classList.add("bar-value");
 
         // Add the data value to the data element
         dataElement.appendChild(dataValue);
@@ -91,7 +91,7 @@ appBar.addData = function (sectionId, data) {
 
     // Create new element for the data item
     let dataElement = document.createElement("div");
-    dataElement.classList.add("app-bar-col");
+    dataElement.classList.add("bar-col");
 
     // Add attribute to the data element
     dataElement.setAttribute("data-id", data.id);
@@ -101,7 +101,7 @@ appBar.addData = function (sectionId, data) {
 
     // Create data label element
     let dataLabel = document.createElement("div");
-    dataLabel.classList.add("app-bar-label");
+    dataLabel.classList.add("bar-label");
     dataLabel.innerHTML = section.data[i].label;
 
     // Add the data label to the data element
@@ -112,7 +112,7 @@ appBar.addData = function (sectionId, data) {
 
     // Add the data value to the data element
     dataElement.appendChild(dataValue);
-    dataValue.classList.add("app-bar-value");
+    dataValue.classList.add("bar-value");
 
     // Update the data value
     appBar.setData(data, dataValue);
@@ -191,7 +191,7 @@ appBar.updateData = function (sectionId, dataId, value) {
     data.value = value;
 
     // Update the app bar
-    appBar.setValue(`[data-id="${sectionId}"] [data-id="${dataId}"] .app-bar-value`, value);
+    appBar.setValue(`[data-id="${sectionId}"] [data-id="${dataId}"] .bar-value`, value);
 
 }
 

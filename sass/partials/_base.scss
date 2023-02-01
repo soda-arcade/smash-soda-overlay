@@ -3,6 +3,7 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
+    //background: #000;
 }
 
 * {
@@ -15,7 +16,7 @@ html, body {
     top: 0;
     left: 0;
     width: 100vw;
-    height: calc(100vh - 20px);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,8 +34,10 @@ html, body {
 }
 
 #app-header {
-    position: relative;
+    position: fixed;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    top: 0;
+    left: 0;
 }
 
 #app-header::after {
@@ -45,4 +48,33 @@ html, body {
     width: 100%;
     height: 2px;
     background: linear-gradient(90deg, rgba(255,50,50,1) 0%, rgba(76,165,209,1) 30%, rgba(110,196,48,1) 70%, rgba(255,221,71,1) 100%);
+}
+
+.window {
+    position: absolute;
+}
+
+.window.left {
+    left: 20px;
+}
+
+.window.right {
+    right: 20px;
+}
+
+.window.top {
+    top: 20px;
+}
+
+.window.bottom {
+    bottom: 20px;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }

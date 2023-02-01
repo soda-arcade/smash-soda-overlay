@@ -5,17 +5,24 @@ const { ipcRenderer, contextBridge } = require('electron')
 contextBridge.exposeInMainWorld('api', {
 
   /**
-   * Gets the latest configuration.
+   * Gets messages from Smash Soda
    * 
    * @returns {Promise}
    */
-  getCfg: () => ipcRenderer.invoke('getCfg'),
+  getMessages: () => ipcRenderer.invoke('getMessages'),
 
   /**
-   * Gets the last message from Smash Soda.
+   * Toggles the chat window interaction
    * 
    * @returns {Promise}
    */
-  getMsg: () => ipcRenderer.invoke('getMsg'),
+  toggleChat: () => ipcRenderer.invoke('toggleChat'),
+
+  /**
+   * Send a message to Smash Soda
+   * 
+   * @returns {Promise}
+   */
+  sendMessage: (message) => ipcRenderer.invoke('sendMessage', message),
 
 });
