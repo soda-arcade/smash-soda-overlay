@@ -101,6 +101,22 @@
     border-bottom: solid 2px rgba(76,165,209,1);
 }
 
+.viewport-row:nth-child(1) .viewport-col.focus:nth-child(1) {
+    border: solid 2px rgba(255,50,50,1);
+}
+
+.viewport-row:nth-child(1) .viewport-col.focus:nth-child(2) {
+    border: solid 2px rgba(110,196,48,1);
+}
+
+.viewport-row:nth-child(2) .viewport-col.focus:nth-child(1) {
+    border: solid 2px rgba(255,221,71,1);
+}
+
+.viewport-row:nth-child(2) .viewport-col.focus:nth-child(2) {
+    border: solid 2px rgba(76,165,209,1);
+}
+
 #viewports.no-border .viewport-col {
     border: none;
 }

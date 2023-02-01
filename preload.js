@@ -12,11 +12,11 @@ contextBridge.exposeInMainWorld('api', {
   getMessages: () => ipcRenderer.invoke('getMessages'),
 
   /**
-   * Toggles the chat window interaction
+   * Gets overlay configuration
    * 
    * @returns {Promise}
    */
-  toggleChat: () => ipcRenderer.invoke('toggleChat'),
+  getCfg: () => ipcRenderer.invoke('getCfg'),
 
   /**
    * Send a message to Smash Soda

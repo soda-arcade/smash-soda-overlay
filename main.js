@@ -9,6 +9,7 @@ const { electron, app, BrowserWindow, ipcMain, globalShortcut } = require('elect
 const path = require('path');
 const express = require("express");
 const { Server } = require('ws');
+const { application } = require('express');
 
 /**
  * The main application window
@@ -18,9 +19,33 @@ let mainWindow;
 // Create the websocket server
 const server = new Server({ port: 9002 });
 
+/**
+ * The list of messages to send to the renderer
+ */
 var messages = [];
 
-var chatInputEnabled = false;
+/**
+ * Configuration
+ */
+var cfg = {
+  updated: false,
+  toggle: {
+    bar: true,
+    chat: true,
+    input: false,
+    viewports: false,
+  },
+  viewports: {
+    views: 4,
+    border: true,
+    showLabels: true,
+    focus: -1,
+  },
+  chat: {
+    full: false,
+    fadeTime: 10000,
+  },
+};
 
 /**
  * Disable hardeware acceleration
@@ -121,32 +146,100 @@ function registerShortcuts() {
 
 	// Toggle chat window interactivity
   globalShortcut.register('CommandOrControl+Shift+C', () => {
-    if (chatInputEnabled) {
+
+    cfg.updated = true;
+
+    if (cfg.toggle.input) {
       mainWindow.setIgnoreMouseEvents(true);
-      chatInputEnabled = false;
+      cfg.toggle.input = false;
       mainWindow.blur();
     } else {
       mainWindow.setIgnoreMouseEvents(false);
-      chatInputEnabled = true;
+      cfg.toggle.input = true;
       mainWindow.focus();
     }
+
 	});
 
 	// Toggle chat window visibility
 	globalShortcut.register('CommandOrControl+Shift+Alt+C', () => {
-			
+    cfg.updated = true;
 	});
 
 	// Overlay opacity up
 	globalShortcut.register('CommandOrControl+Shift+Up', () => {
-
+    cfg.updated = true;
 	});
 
 	// Overlay opacity down
 	globalShortcut.register('CommandOrControl+Shift+Down', () => {
+    cfg.updated = true;
+  });
+  
+  // Enables Viewport
+  globalShortcut.register('CommandOrControl+Shift+V', () => {
+    cfg.updated = true;
+    cfg.toggle.viewports = !cfg.toggle.viewports;
+  });
 
-	});
+  // Sets viewports to 2
+  globalShortcut.register('CommandOrControl+2', () => {
+    cfg.updated = true;
+    cfg.viewports.views = 2;
+  });
 
+  // Sets viewports to 3
+  globalShortcut.register('CommandOrControl+3', () => {
+    cfg.updated = true;
+    cfg.viewports.views = 3;
+  });
+
+  // Sets viewports to 4
+  globalShortcut.register('CommandOrControl+4', () => {
+    cfg.updated = true;
+    cfg.viewports.views = 4;
+  });
+
+  // Focus on viewport 1
+  globalShortcut.register('CommandOrControl+Shift+1', () => {
+    cfg.updated = true;
+    if (cfg.viewports.focus != 0) {
+      cfg.viewports.focus = 0;
+    } else {
+      cfg.viewports.focus = -1;
+    }
+  });
+
+  // Focus on viewport 2
+  globalShortcut.register('CommandOrControl+Shift+2', () => {
+    cfg.updated = true;
+    if (cfg.viewports.focus != 1) {
+      cfg.viewports.focus = 1;
+    } else {
+      cfg.viewports.focus = -1;
+    }
+  });
+    
+  // Focus on viewport 3 
+  globalShortcut.register('CommandOrControl+Shift+3', () => {
+    cfg.updated = true;
+    if (cfg.viewports.focus != 2) {
+      cfg.viewports.focus = 2;
+    } else {
+      cfg.viewports.focus = -1;
+    }
+  });
+
+  // Focus on viewport 4
+  globalShortcut.register('CommandOrControl+Shift+4', () => {
+    cfg.updated = true;
+    if (cfg.viewports.focus != 3) {
+      cfg.viewports.focus = 3;
+    } else {
+      cfg.viewports.focus = -1;
+    }
+  });
+  
 }
 
 /**
@@ -162,19 +255,27 @@ ipcMain.handle('getMessages', async (event, arg) => {
 });
 
 /**
- * Toggle chat window interactivity
+ * Sends config to renderer
  */
-ipcMain.handle('toggleChat', async (event, arg) => {
-  return chatInputEnabled;
+ipcMain.handle('getCfg', async (event, arg) => {
+
+  // Make copy of cfg
+  var cfgCopy = JSON.parse(JSON.stringify(cfg)); 
+  cfg.updated = false;
+
+  return cfgCopy;
+
 });
 
 /**
- * Toggle chat window interactivity
+ * Send a message to Soda
  */
 ipcMain.handle('sendMessage', async (event, arg) => {
   console.log("Sending message to client");
+
   server.clients.forEach(client => {
     client.send(JSON.stringify(arg));
   });
+
   return true;
 });

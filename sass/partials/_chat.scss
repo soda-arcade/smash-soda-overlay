@@ -23,19 +23,25 @@
 }
 
 #chat-messages {
+    overflow-x: hidden;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
-    opacity: .8;
+    opacity: .85;
     align-items: flex-start;
+}
+
+#chat-messages.active {
+    opacity: .95;
 }
 
 .chat-message {
     display: flex;
     justify-content: flex-start;
     gap: 1vh;
-    background: rgba($color: $theme-bg, $alpha: .7);
+    background: rgba($color: $theme-bg, $alpha: .9);
     padding: .5vh 1vh;
+    font-size: $font-size;
 }
 
 .chat-message:first-child {
@@ -62,4 +68,19 @@
 
 .fade-out {
     animation: fadeOut 1s;
+}
+
+#chat-messages.full {
+    overflow-y: auto;
+    padding: .5vw;
+    background: rgba($color: $theme-bg, $alpha: .9);
+}
+
+#chat-messages.full .chat-message {
+    width: 100%;
+    background: none;
+}
+
+#chat-messages.full.active {
+    height: 20vh;
 }

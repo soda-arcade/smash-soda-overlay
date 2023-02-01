@@ -1,22 +1,15 @@
 /**
  * Smash Soda overlay
  *
- * @link       https://mickeyuk.github.io
+ * @link       https://mickeyuk.com
  * @since      1.0.0
  */
 function app() { }
 
 /**
- * Default configuration.
+ * Overlay configuration
  */
-app.default = {
-
-};
-
-/**
- * Overlay configuration.
- */
-app.cfg = { ...app.default };
+app.cfg;
 
 /**
  * Interval for the main loop.
@@ -37,15 +30,7 @@ app.host;
  * Initializes the app.
  */
 app.init = function () {
-    
-    // Get current configuration
-    // api.getCfg().then((data) => {
 
-    //     // Update the configuration
-    //     app.cfg = { ...app.cfg, ...data }; 
-
-    // });
-    
     // Application loop
     app.interval = setInterval(app.update, 500);
 
@@ -55,6 +40,40 @@ app.init = function () {
  * Main app loop.
  */
 app.update = function () {
+
+    // Configuration
+    api.getCfg().then((data) => {
+
+        // Update config
+        if (data.updated) {
+
+            // Store configuration
+            app.cfg = data;
+
+            // Toggle chat input
+            if (app.cfg.toggle.input) {
+                chat.inputEnable();
+            } else {
+                chat.inputDisable();
+            }
+
+            // Enable viewports
+            if (app.cfg.toggle.viewports) {
+                viewport.addViewports(
+                    app.cfg.viewports.views,
+                    app.cfg.viewports.border,
+                    app.cfg.viewports.showLabel
+                )
+            } else {
+                viewport.addViewports(0);
+            }
+
+            viewport.focus(app.cfg.viewports.focus);
+
+        }
+        // you silly silly code lurker!
+        
+    });
 
     // Get messages from Smash Soda
     api.getMessages().then((data) => {
@@ -77,17 +96,6 @@ app.update = function () {
                 }
                 
             });
-        }
-
-    });
-
-    // Toggle chat
-    api.toggleChat().then((data) => {
-
-        if (data) {
-            chat.inputEnable();
-        } else {
-            chat.inputDisable();
         }
 
     });

@@ -32,7 +32,7 @@ html, body {
   align-items: center;
   justify-content: center;
   font-family: "Nunito Sans", sans-serif;
-  font-size: 0.7vw;
+  font-size: 0.9vw;
 }
 
 #app > * {
@@ -97,6 +97,18 @@ html, body {
     opacity: 0;
   }
 }
+::-webkit-scrollbar {
+  width: 1vw;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(26, 26, 26, 0.95);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444444;
+}
+
 .bar {
   background-color: #2F2F2F;
   color: #dfdfdf;
@@ -250,6 +262,22 @@ html, body {
   border-bottom: solid 2px rgb(76, 165, 209);
 }
 
+.viewport-row:nth-child(1) .viewport-col.focus:nth-child(1) {
+  border: solid 2px rgb(255, 50, 50);
+}
+
+.viewport-row:nth-child(1) .viewport-col.focus:nth-child(2) {
+  border: solid 2px rgb(110, 196, 48);
+}
+
+.viewport-row:nth-child(2) .viewport-col.focus:nth-child(1) {
+  border: solid 2px rgb(255, 221, 71);
+}
+
+.viewport-row:nth-child(2) .viewport-col.focus:nth-child(2) {
+  border: solid 2px rgb(76, 165, 209);
+}
+
 #viewports.no-border .viewport-col {
   border: none;
 }
@@ -283,19 +311,25 @@ html, body {
 }
 
 #chat-messages {
+  overflow-x: hidden;
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
-  opacity: 0.8;
+  opacity: 0.85;
   align-items: flex-start;
+}
+
+#chat-messages.active {
+  opacity: 0.95;
 }
 
 .chat-message {
   display: flex;
   justify-content: flex-start;
   gap: 1vh;
-  background: rgba(47, 47, 47, 0.7);
+  background: rgba(47, 47, 47, 0.9);
   padding: 0.5vh 1vh;
+  font-size: 0.9vw;
 }
 
 .chat-message:first-child {
@@ -323,4 +357,19 @@ html, body {
 .fade-out {
   -webkit-animation: fadeOut 1s;
           animation: fadeOut 1s;
+}
+
+#chat-messages.full {
+  overflow-y: auto;
+  padding: 0.5vw;
+  background: rgba(47, 47, 47, 0.9);
+}
+
+#chat-messages.full .chat-message {
+  width: 100%;
+  background: none;
+}
+
+#chat-messages.full.active {
+  height: 20vh;
 }/*# sourceMappingURL=app.css.map */

@@ -107,14 +107,23 @@ viewport.focus = function (index) {
     var viewportCols = document.getElementsByClassName("viewport-col");
     if (viewportCols.length == 0) return;
     for (var i = 0; i < viewportCols.length; i++) {
-        viewportCols[i].style.display = "none";
+        if (index != -1) {
+            viewportCols[i].style.display = "none";
+        } else {
+            viewportCols[i].style.display = "flex";
+        }
     }
-    document.getElementsByClassName("viewport-row")[0].style.display = "none";
-    document.getElementsByClassName("viewport-row")[1].style.display = "none";
-    
-    // Show the viewport col class for the index
-    viewportCols[index].style.display = "flex";
-    document.getElementById("viewport-" + index).parentNode.style.display = "flex";
-    document.getElementById("viewport-" + index).classList.add("focus");
+
+    if (index != -1) {
+
+        document.getElementsByClassName("viewport-row")[0].style.display = "none";
+        document.getElementsByClassName("viewport-row")[1].style.display = "none";
+        
+        // Show the viewport col class for the index
+        viewportCols[index].style.display = "flex";
+        document.getElementById("viewport-" + index).parentNode.style.display = "flex";
+        document.getElementById("viewport-" + index).classList.add("focus");
+
+    }
 
 }

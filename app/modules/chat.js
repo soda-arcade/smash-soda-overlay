@@ -60,6 +60,10 @@ chat.addMessage = function (guest, message) {
  */
 chat.update = function () {
 
+    if (app.cfg.chat.full) {
+        document.getElementById("chat-messages").classList.add("full");
+    }
+
     if (app.messages.length > 0) {
 
         // Add message
@@ -97,6 +101,7 @@ chat.inputEnable = function () {
     document.getElementById("chat-input").disabled = false;
     document.getElementById("chat-input").focus();
     document.getElementById("chat-input").focus();
+    document.getElementById("chat-messages").classList.add("active");
 
 };
 
@@ -108,6 +113,7 @@ chat.inputDisable = function () {
     chat.inputEnabled = false;
     document.getElementById("chat-input").disabled = true;
     document.getElementById("chat-input").blur();
+    document.getElementById("chat-messages").classList.remove("active");
 
 };
 
