@@ -1,7 +1,7 @@
 /**
  * Import all the required Electron components
  */
-const { electron, app, BrowserWindow, ipcMain, globalShortcut, Menu, Tray } = require('electron');
+const { electron, app, BrowserWindow, ipcMain, globalShortcut, Menu, Tray, nativeImage } = require('electron');
 
 /**
  * Import all the required Node.js components
@@ -23,6 +23,11 @@ let tray = null;
 
 // Create the websocket server
 const server = new Server({ port: 9002 });
+
+/**
+ * Was a connection made to Soda?
+ */
+let sodaConnected = false;
 
 /**
  * The list of messages to send to the renderer
@@ -127,7 +132,15 @@ app.whenReady().then(() => {
 	// Register all the shortcut keys
 	registerShortcuts();
 
-  tray = new Tray('img/icon.ico')
+  var iconPath = path.join(__dirname, '/img/icon.ico');
+  let trayIcon = nativeImage.createFromPath(iconPath);  
+
+  tray = new Tray(trayIcon);
+  trayIcon = trayIcon.resize({  
+    width: 16,  
+    height: 16  
+  });  
+
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Quit', click: () => { app.quit(); } },
   ])
@@ -153,8 +166,14 @@ app.on('window-all-closed', function () {
 
 // Listen for new connections
 server.on('connection', (ws) => {
+    sodaConnected = true;
     console.log('New client connected!'); 
-    ws.on('close', () => console.log('Client has disconnected!'));
+    ws.on('close', () => {
+      console.log('Client has disconnected!');
+      if (sodaConnected) {
+        app.quit();
+      }
+    });
   
     ws.on('message', (message) => {
       console.log('Received: %s', message);

@@ -11,6 +11,8 @@ function chat() { }
  */
 chat.inputEnabled = false;
 
+chat.messages = 5;
+
 /**
  * Adds a message to the chat window.
  * 
@@ -47,6 +49,11 @@ chat.addMessage = function (guest, message) {
     // Prepend message
     div.innerHTML = msg;
     document.getElementById("chat-messages").prepend(div);
+
+    // If chat is full, remove last message
+    if (document.getElementById("chat-messages").children.length > chat.messages) {
+        document.getElementById("chat-messages").lastChild.remove();
+    }
 
     const timer = setTimeout(() => {
         div.classList.add("fade-out");
