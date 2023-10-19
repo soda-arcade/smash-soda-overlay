@@ -22,6 +22,16 @@ app.interval = null;
 app.messages = [];
 
 /**
+ * Guests in the lobby.
+ */
+app.guests = [];
+
+/**
+ * Gamepads connected in the lobby.
+ */
+app.gamepads = [];
+
+/**
  * The host guest.
  */
 app.host;
@@ -31,8 +41,10 @@ app.host;
  */
 app.init = function () {
 
+    //appBar.addSection('top', 'top-left');
+
     // Application loop
-    app.interval = setInterval(app.update, 500);
+    app.interval = setInterval(app.update, 100);
 
 };
 
@@ -57,51 +69,90 @@ app.update = function () {
                 chat.inputDisable();
             }
 
-            // Enable viewports
-            if (app.cfg.toggle.viewports) {
-                viewport.addViewports(
-                    app.cfg.viewports.views,
-                    app.cfg.viewports.border,
-                    app.cfg.viewports.showLabel
-                )
-            } else {
-                viewport.addViewports(0);
-            }
-
-            viewport.focus(app.cfg.viewports.focus);
+            // Update viewports
+            viewport.update();
 
         }
-        // you silly silly code lurker!
+        // you silly silly code lurker! - Youseif
         
     });
 
-    // Get messages from Smash Soda
-    api.getMessages().then((data) => {
+    if (app.cfg != null) {
 
-        // Add new messages
-        if (data != null && data.length > 0) {
-            data.forEach((message) => {
+        // Get messages from Smash Soda
+        api.getMessages().then((data) => {
 
-                // Process message
-                switch (message.type) {
+            // Add new messages
+            if (data != null && data.length > 0) {
+                data.forEach((message) => {
 
-                    case 'host': // Tell the overlay who the host is
-                        app.host = message;
-                        break;
+                    // Process message
+                    switch (message.type) {
 
-                    default: // Assume it's a chat message
-                        app.messages.push(message);
-                        break;
+                        case 'host': // Tell the overlay who the host is
+                            app.host = message.host;
+                            break;
+                        
+                        case 'guests': // Tell the overlay who is in the lobby
+                            app.guests = message.guests;
+                            break;
+                        
+                        case 'gamepads': // Pass gamepad data to the overlay
+                            app.gamepads = message.gamepads;
+                            break;
+                        
+                        case 'addSection': // Add a section to the overlay
+                            appBar.addSection(
+                                message.barId,
+                                message.sectionId,
+                            );
+                            break;
+                        
+                        case 'removeSection': // Remove a section from the overlay
+                            appBar.removeSection(
+                                message.barId,
+                                message.sectionId,
+                            );
+                            break;
+                        
+                        case 'addValue': // Add a value to a section
+                            appBar.addValue(
+                                message.sectionId,
+                                message.valueId,
+                                message.value,
+                                message.label,
+                            );
+                            break;
+                        
+                        case 'modifyValue': // Modify a value in a section
+                            appBar.modifyValue(
+                                message.valueId,
+                                message.value,
+                            );
+                            break;
+                        
+                        case 'removeValue': // Remove a value from a section
+                            appBar.removeValue(
+                                message.valueId,
+                                message.sectionId,
+                            );
+                            break;
 
-                }
-                
-            });
-        }
+                        default: // Assume it's a chat message
+                            app.messages.push(message);
+                            break;
 
-    });
+                    }
+                    
+                });
+            }
 
-    // Update chat
-    chat.update();
+        });
+
+        // Update chat
+        chat.update();
+
+    };
 
 };
 

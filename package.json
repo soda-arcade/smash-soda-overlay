@@ -1,10 +1,11 @@
 {
-  "name": "smash-soda-overlay",
+  "name": "Smash-Soda-Overlay",
   "version": "1.0.0",
   "description": "A overlay application for Smash Soda.",
   "main": "./main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "packager": "electron-packager ./ --platform=win32 --icon=img/icon.ico"
   },
   "repository": {
     "type": "git",
@@ -13,14 +14,15 @@
   "author": "Michael Dearman",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^21.2.3",
-    "ws": "^8.5.0"
+    "electron": "^27.0.1",
+    "electron-packager": "^17.1.2"
   },
   "bugs": {
     "url": "https://github.com/electron/electron-quick-start/issues"
   },
   "homepage": "https://github.com/electron/electron-quick-start#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "ws": "^8.5.0"
   }
 }

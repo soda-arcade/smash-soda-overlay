@@ -37,9 +37,17 @@ viewport.addViewports = function (total, showBorder = true, showLabel = true, ga
             document.getElementsByClassName("viewport-row")[1].innerHTML = viewport.html(2, true);
             break;
         case 4:
-            document.getElementsByClassName("viewport-row")[0].innerHTML = viewport.html(0, (margin || gap)) + viewport.html(1, (margin || gap));
-            document.getElementsByClassName("viewport-row")[1].innerHTML = viewport.html(2, (margin || gap)) + viewport.html(3, (margin || gap));
+            document.getElementsByClassName("viewport-row")[0].innerHTML = viewport.html(0, true) + viewport.html(1, true);
+            document.getElementsByClassName("viewport-row")[1].innerHTML = viewport.html(2, true) + viewport.html(3, true);
             break;
+    }
+
+    // Add player labels for each viewport
+    if (showLabel) {
+        for (var i = 0; i < total; i++) {
+            appBar.addSection(`viewport${i}-guest`, `viewport${i}`);
+            appBar.addValue(`viewport${i}-guest`, `pad-${i}-name`, "", `P${i + 1}`);
+        }
     }
 
     var viewports = document.getElementById("viewports");
@@ -64,11 +72,8 @@ viewport.html = function (index, gap = false, single = false) {
 
     var html = `
     <div id="viewport-${index}" class="viewport-col ${(gap ? "gap" : "")} ${(single ? "single" : "")}">
-        <div class="viewport-bar bar">
-            <div class="bar-col" data-id="viewport${index}-section1-item1">
-                <div class="bar-label">P${index+1}</div>
-                <div class="bar-value">MickeyUK</div>
-            </div>
+        <div class="viewport-bar">
+            <div data-id="viewport${index}" class="bar"></div>
         </div>
     </div>
     `;
@@ -127,3 +132,34 @@ viewport.focus = function (index) {
     }
 
 }
+
+/**
+ * Updates the viewports.
+ */
+viewport.update = function () {
+
+    // Enable viewports
+    if (app.cfg.toggle.viewports) {
+                
+        // Horizontal/Vertical 2 player split
+        if (app.cfg.viewports.verticalSplit &&
+            app.cfg.viewports.views == 2) {
+            document.getElementById('viewports').classList.add('vertical');
+        } else {
+            document.getElementById('viewports').classList.remove('vertical');
+        }
+
+        viewport.addViewports(
+            app.cfg.viewports.views,
+            app.cfg.viewports.border,
+            app.cfg.viewports.showLabel
+        )
+
+        // Focus on a viewport
+        viewport.focus(app.cfg.viewports.focus);
+        
+    } else {
+        viewport.addViewports(0);
+    }
+
+};

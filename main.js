@@ -1,7 +1,7 @@
 /**
  * Import all the required Electron components
  */
-const { electron, app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
+const { electron, app, BrowserWindow, ipcMain, globalShortcut, Menu, Tray } = require('electron');
 
 /**
  * Import all the required Node.js components
@@ -15,6 +15,11 @@ const { application } = require('express');
  * The main application window
  */
 let mainWindow;
+
+/**
+ * The tray icon
+ */
+let tray = null;
 
 // Create the websocket server
 const server = new Server({ port: 9002 });
@@ -40,6 +45,7 @@ var cfg = {
     border: true,
     showLabels: true,
     focus: -1,
+    verticalSplit: false,
   },
   chat: {
     full: false,
@@ -80,6 +86,8 @@ function createWindow() {
     icon: 'img/icon.ico',
     show: false,
     skipTaskbar: true,
+    titleBarStyle: 'hidden',
+    autoHideMenuBar: true,
   });
 
   // and load the index.html of the app.
@@ -87,16 +95,24 @@ function createWindow() {
     //.then(() => { mainWindow.webContents.openDevTools(); });
 
   // Always on top
-  mainWindow.setPosition(0, 0)
-  mainWindow.setAlwaysOnTop(true, "screen-saver")
-  mainWindow.setVisibleOnAllWorkspaces(true)
-  mainWindow.setFullScreenable(false)
-  mainWindow.setMenuBarVisibility(false)
-  mainWindow.maximize()
-  mainWindow.show()
-  mainWindow.setIgnoreMouseEvents(true)
-  mainWindow.setKiosk(true)
-  mainWindow.showInactive()
+  mainWindow.setPosition(0, 0);
+  mainWindow.setAlwaysOnTop(true, "screen-saver");
+  mainWindow.setVisibleOnAllWorkspaces(true);
+  mainWindow.setFullScreenable(true);
+  mainWindow.setMenuBarVisibility(false);
+  mainWindow.maximize();
+  mainWindow.show();
+  mainWindow.setIgnoreMouseEvents(true);
+  mainWindow.setKiosk(true);
+  mainWindow.showInactive();
+
+  mainWindow.on('blur', () => {
+    mainWindow.setBackgroundColor('#00000000')
+  });
+  
+  mainWindow.on('focus', () => {
+    mainWindow.setBackgroundColor('#00000000')
+  });
   
 }
 
@@ -110,6 +126,13 @@ app.whenReady().then(() => {
 
 	// Register all the shortcut keys
 	registerShortcuts();
+
+  tray = new Tray('img/icon.ico')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Quit', click: () => { app.quit(); } },
+  ])
+  tray.setToolTip('Smash Soda Overlay')
+  tray.setContextMenu(contextMenu)
 
 }).then(() => {
 
@@ -153,10 +176,12 @@ function registerShortcuts() {
       mainWindow.setIgnoreMouseEvents(true);
       cfg.toggle.input = false;
       mainWindow.blur();
+      mainWindow.titleBarStyle = 'hidden';
     } else {
       mainWindow.setIgnoreMouseEvents(false);
       cfg.toggle.input = true;
       mainWindow.focus();
+      mainWindow.titleBarStyle = 'hidden';
     }
 
 	});
@@ -176,9 +201,10 @@ function registerShortcuts() {
     cfg.updated = true;
   });
   
-  // Enables Viewport
+  // Toggles Viewport
   globalShortcut.register('CommandOrControl+Shift+V', () => {
     cfg.updated = true;
+    cfg.viewports.focus = -1;
     cfg.toggle.viewports = !cfg.toggle.viewports;
   });
 
@@ -238,6 +264,24 @@ function registerShortcuts() {
     } else {
       cfg.viewports.focus = -1;
     }
+  });
+
+  // Horizontal/Vertical 2 player
+  globalShortcut.register('CommandOrControl+V+Left', () => {
+    cfg.updated = true;
+    cfg.viewports.verticalSplit = false;
+  });
+  globalShortcut.register('CommandOrControl+V+Right', () => { 
+    cfg.updated = true;
+    cfg.viewports.verticalSplit = false;
+  });
+  globalShortcut.register('CommandOrControl+V+Up', () => { 
+    cfg.updated = true;
+    cfg.viewports.verticalSplit = true;
+  });
+  globalShortcut.register('CommandOrControl+V+Down', () => { 
+    cfg.updated = true;
+    cfg.viewports.verticalSplit = true;
   });
   
 }

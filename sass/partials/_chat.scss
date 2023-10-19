@@ -16,6 +16,11 @@
     padding: 8px 10px;
     opacity: .9;
     width: 100%;
+    display: none;
+}
+
+#chat-input.active {
+    display: flex;
 }
 
 #chat-input:focus {

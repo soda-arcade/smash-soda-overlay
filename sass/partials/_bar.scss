@@ -6,6 +6,10 @@
     justify-content: space-between;
 }
 
+.bar.hidden {
+    display: none;
+}
+
 .bar-row {
     display: flex;
     align-items: center;
@@ -41,6 +45,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.bar-item {
+    display: flex;
+    gap: .5vw;
 }
 
 .bar-label {

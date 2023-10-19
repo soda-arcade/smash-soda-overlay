@@ -26,3 +26,5 @@ contextBridge.exposeInMainWorld('api', {
   sendMessage: (message) => ipcRenderer.invoke('sendMessage', message),
 
 });
+
+console.log('preload.js loaded');

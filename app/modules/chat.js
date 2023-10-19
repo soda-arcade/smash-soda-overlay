@@ -6,6 +6,9 @@
  */
 function chat() { }
 
+/**
+ * Whether the chat input is enabled.
+ */
 chat.inputEnabled = false;
 
 /**
@@ -99,9 +102,9 @@ chat.inputEnable = function () {
 
     chat.inputEnabled = true;
     document.getElementById("chat-input").disabled = false;
-    document.getElementById("chat-input").focus();
-    document.getElementById("chat-input").focus();
+    document.getElementById("chat-input").classList.add("active");
     document.getElementById("chat-messages").classList.add("active");
+    document.getElementById("chat-input").focus();
 
 };
 
@@ -113,6 +116,7 @@ chat.inputDisable = function () {
     chat.inputEnabled = false;
     document.getElementById("chat-input").disabled = true;
     document.getElementById("chat-input").blur();
+    document.getElementById("chat-input").classList.remove("active");
     document.getElementById("chat-messages").classList.remove("active");
 
 };
