@@ -126,6 +126,13 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
 
+  // Timeout to check if soda is connected (10 seconds)
+  setTimeout(() => {
+    if (!sodaConnected) {
+      app.quit();
+    }
+  }, 10000);
+
 	// Create the main application window
 	createWindow();
 
