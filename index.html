@@ -1,45 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">-->
-    <link href="./css/app.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <title>Smash Soda Overlay</title>
+    <style>
+      *,
+      :after,
+      :before {
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+      }
 
-    <link rel="icon" type="image/png" sizes="32x32" href="./img/icon.ico">
+      body {
+          margin: 0;
+          background: transparent;
+      }
+
+      #loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .loader {
+        background: #2c2c2c;
+        color: #fff;
+        width: 250px;
+        padding: 10px;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .spinner {
+          text-align: center;
+          width: 100%;
+          position: relative;
+          margin-bottom: 10px;
+      }
+
+      .spinner svg {
+          -webkit-animation: loading-rotate 2s linear infinite;
+          -moz-animation: loading-rotate 2s linear infinite;
+          -o-animation: loading-rotate 2s linear infinite;
+          animation: loading-rotate 2s linear infinite;
+          height: 42px;
+          width: 42px;
+      }
+
+      .spinner .path {
+          stroke-dasharray: 90, 150;
+          stroke-dashoffset: 0;
+          stroke-width: 2;
+          stroke: #db8bf3;
+          stroke-linecap: round;
+          -webkit-animation: loading-dash 1.5s ease-in-out infinite;
+          -moz-animation: loading-dash 1.5s ease-in-out infinite;
+          -o-animation: loading-dash 1.5s ease-in-out infinite;
+          animation: loading-dash 1.5s ease-in-out infinite;
+      }
+
+      @-webkit-keyframes loading-rotate {
+          to {
+              -webkit-transform: rotate(1turn);
+              transform: rotate(1turn);
+          }
+      }
+
+      @-moz-keyframes loading-rotate {
+          to {
+              -moz-transform: rotate(1turn);
+              transform: rotate(1turn);
+          }
+      }
+
+      @-o-keyframes loading-rotate {
+          to {
+              -o-transform: rotate(1turn);
+              transform: rotate(1turn);
+          }
+      }
+
+      @keyframes loading-rotate {
+          to {
+              -webkit-transform: rotate(1turn);
+              -moz-transform: rotate(1turn);
+              -o-transform: rotate(1turn);
+              transform: rotate(1turn);
+          }
+      }
+
+      @-webkit-keyframes loading-dash {
+          0% {
+              stroke-dasharray: 1, 200;
+              stroke-dashoffset: 0;
+          }
+          50% {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -40px;
+          }
+          to {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -120px;
+          }
+      }
+
+      @-moz-keyframes loading-dash {
+          0% {
+              stroke-dasharray: 1, 200;
+              stroke-dashoffset: 0;
+          }
+          50% {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -40px;
+          }
+          to {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -120px;
+          }
+      }
+
+      @-o-keyframes loading-dash {
+          0% {
+              stroke-dasharray: 1, 200;
+              stroke-dashoffset: 0;
+          }
+          50% {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -40px;
+          }
+          to {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -120px;
+          }
+      }
+
+      @keyframes loading-dash {
+          0% {
+              stroke-dasharray: 1, 200;
+              stroke-dashoffset: 0;
+          }
+          50% {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -40px;
+          }
+          to {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -120px;
+          }
+      }
+    </style>
   </head>
   <body>
-
-    <div id="app">
-
-      <header id="app-header" class="bar">
-        <div id="app-header-bar" class="bar-row" data-id="top-bar">
+    <div id="loading">
+      <div class="loader">
+        <div class="spinner">
+          <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+          </svg>
         </div>
-      </header>
-
-      <main id="app-main">
-
-        <form id="chat" class="window left top" onsubmit="event.preventDefault(); chat.sendMessage();">
-          <input id="chat-input" type="text" onfocusout="chat.unfocus()">
-          <div id="chat-messages"></div>
-        </form>
-
-        <div id="viewports" class="active">
-          <div class="viewport-row"></div>
-          <div class="viewport-row"></div>
-        </div>
-
-      </main>
+        Connecting overlay to Smash Soda...
+      </div>
     </div>
-
-    <!-- Smash Soda Overlay -->
-    <script src="./app/modules/helpers.js"></script>
-    <script src="./app/modules/bar.js"></script>
-    <script src="./app/modules/viewport.js"></script>
-    <script src="./app/modules/chat.js"></script>
-
-    <script src="./app/app.js"></script>
-
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -1,0 +1,26 @@
+.widget {
+    position: absolute;
+    box-sizing: border-box;
+
+    &.top {
+        top: 0;
+    }
+
+    &.right {
+        right: 0;
+    }
+
+    &.bottom {
+        bottom: 0;
+    }
+
+    &.left {
+        left: 0;
+    }
+
+    // Top center
+    &.center {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

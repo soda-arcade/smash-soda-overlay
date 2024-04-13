@@ -21,8 +21,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="#features">Setup</a></li>
-    <li><a href="#chat-commands">Chat Commands</a></li>
+    <li><a href="#setup">Setup</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -33,9 +32,9 @@
 
 ## About the Project
 
-Here is the source code for the overlay application included with <a href="https://github.com/mickeyuk/SmashSoda">Smash Soda</a>. It has been developed with <a href="https://www.electronjs.org/">Electron</a>. It is not intended to be run standalone, and won't work with <a href="https://github.com/v6ooo/ParsecSodaV">Parsec Soda V</a>'s Web Sockets widget.
+Here is the source code for the overlay application included with <a href="https://github.com/mickeyuk/SmashSoda">Smash Soda</a>. It has been developed with Electron. It is not intended to be run standalone, and won't work with <a href="https://github.com/v6ooo/ParsecSodaV">Parsec Soda V</a>'s Web Sockets widget.
 
-The source code is made public in case anybody wants to modify and compile for their own purposes. Compiled releases will be included with new releases of Smash Soda.
+The source code is made public in case anybody wants to modify and compile for their own purposes (or contribute to the project!). The release builds will auto update
 
 Issues and feature requests should be made in the <a href="https://github.com/MickeyUK/SmashSoda/issues">Smash Soda repository</a>.
 
@@ -84,14 +83,38 @@ cd smash-soda-overlay
 npm install
 ```
 
-To run the application:
+To test the application:
 
 ```
-npm start
+npm run dev
 ```
 
-For building the application, consult <a href="https://www.electronjs.org/docs/latest/development/build-instructions-gn">Electron's build guide</a>. The compiled application should be placed in the `overlay` folder where you have Smash Soda installed. Smash Soda works from version 3.0 onwards.
 
+To build the application:
+
+```
+npm run build
+```
+
+----
+
+Here are some basic pointers for editing the source code for your own custom uses.
+
+The project uses [Sass](https://sass-lang.com/) for building the stylesheet, and has been configured to work with [Visual Studio Code](https://code.visualstudio.com/) and the ```Live Sass Compiler``` extension by ```Ritwick Dey```.
+
+Socket messages from Smash Soda to come in this JSON format:
+```json
+{
+  "event": "event name",
+  "data": {}
+}
+```
+This is than transmitted across the app with the eventBus, which I just hooked on to the window object to keep things simple. You can then listen to events like:
+```ts
+window.$eventBus.on('event name', (data: any) => {
+  // Do thing
+});
+```
 
 ## Contributing
 
