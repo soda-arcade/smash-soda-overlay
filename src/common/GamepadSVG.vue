@@ -224,6 +224,7 @@ export default defineComponent({
             
             // Find button element
             let el = $(`.pad-${this.id} .gp-btn.${btn}`);
+            window.$eventBus.emit('log:message', { id: "23", message: "blah" });
 
             // Add pressed class
             if (state) {

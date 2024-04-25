@@ -2,6 +2,7 @@ export default class Config {
     chat: {
         active: boolean;
         position?: string;
+        showHistory?: boolean;
     };
     enabled: boolean;
     gamepads: {
@@ -20,7 +21,8 @@ export default class Config {
     constructor() {
         this.chat = {
             active: false,
-            position: 'bottom'
+            position: 'bottom',
+            showHistory: true
         };
         this.enabled = false;
         this.gamepads = {

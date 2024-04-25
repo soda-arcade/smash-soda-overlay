@@ -62,7 +62,7 @@ export default {
 
         // Remove a user when the event is triggered
         window.$eventBus.on('guest:remove', (data: any) => {
-            this.removeUser(new User(data.id, data.name));
+            this.removeUser(new User(data.id, ""));
         });
 
         // Update the users' latencies when the event is triggered
@@ -71,7 +71,8 @@ export default {
             data.users.forEach((user: any) => {
                 var guest = this.findGuestById(user.id);
                 if (guest) {
-                    guest.latency = user.latency;
+                    // Round the latency to the nearest integer
+                    guest.latency = Math.round(user.latency);
                 }
             });
         });

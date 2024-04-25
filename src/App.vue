@@ -41,7 +41,16 @@ export default {
 
     // Config file updated?
     window.$eventBus.on('config:updated', (data) => {
-      window.$config = data;
+      window.$config.chat.active = data.chat.active;
+      window.$config.chat.position = data.chat.position;
+
+      window.$config.guests.active = data.guests.active;
+      window.$config.guests.position = data.guests.position;
+      window.$config.guests.showLatency = data.guests.showLatency;
+
+      window.$config.gamepads.active = data.gamepads.active;
+      window.$config.gamepads.position = data.gamepads.position;
+      window.$config.gamepads.showHotseat = data.gamepads.showHotseat;
     });
 
     window.$eventBus.on('opacity:increase', () => {

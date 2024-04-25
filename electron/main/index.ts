@@ -124,21 +124,23 @@ async function createWindow() {
     win.loadURL(indexHtml, {"extraHeaders" : "pragma: no-cache\n"});
   }
 
-  // Test actively push message to the Electron-Renderer
-  win.webContents.on('did-finish-load', () => {
-    
+  function getConfig() {
     const appDataPath = app.getPath('appData');
     const filePath = path.join(appDataPath, '/SmashSodaTwo/config.json');
 
     fs.promises.readFile(filePath, 'utf-8')
-      .then(data => {
-        const jsonData = JSON.parse(data);
-        win?.webContents.send('config:data', jsonData.Overlay);
-      })
-      .catch(err => {
-        console.error('An error occurred reading the file: ', err);
-      });
+    .then(data => {
+      const jsonData = JSON.parse(data);
+      win?.webContents.send('config:data', jsonData.Overlay);
+    })
+    .catch(err => {
+      console.error('An error occurred reading the file: ', err);
+    });
+  }
 
+  // Test actively push message to the Electron-Renderer
+  win.webContents.on('did-finish-load', () => {
+    getConfig();
   });
 
   // Make all links open with the browser, not with the application
@@ -244,11 +246,11 @@ async function createServer() {
   });
 
   // Start connection timer
-  setTimeout(() => {
-    if (!socket) {
-      app.quit();
-    }
-  }, 10000);
+  // setTimeout(() => {
+  //   if (!socket) {
+  //     app.quit();
+  //   }
+  // }, 10000);
 
 }
 

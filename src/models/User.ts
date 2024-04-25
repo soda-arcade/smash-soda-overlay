@@ -2,7 +2,7 @@ export default class User {
     id: string;
     name: string;
     latency: number = 0;
-    hotseatTime: number = 0;
+    hotseatTime: string = "";
 
     constructor(id: string, name: string) {
         this.id = id;
