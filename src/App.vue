@@ -1,8 +1,8 @@
 <template>
   <div id="app" :style="{ opacity: opacity }">
-    <WidgetChat v-if="config.chat.active" :class="`${config.chat.position}`" />
-    <WidgetGuests v-if="config.guests.active" :class="`${config.guests.position}`" />
-    <WidgetPads v-if="config.gamepads.active" :class="`${config.gamepads.position}`" />
+    <WidgetChat v-if="config.chat?.active" :class="`${config.chat?.position}`" />
+    <WidgetGuests v-if="config.guests?.active" :class="`${config.guests?.position}`" />
+    <WidgetPads v-if="config.gamepads?.active" :class="`${config.gamepads?.position}`" />
   </div>
 </template>
 <script lang="ts">
@@ -19,12 +19,8 @@ export default {
   },
   data() {
     return {
-      opacity: 1
-    }
-  },
-  computed: {
-    config() {
-      return window.$config;
+      opacity: 1,
+      config: window.$config as any
     }
   },
   methods: {
@@ -41,16 +37,9 @@ export default {
 
     // Config file updated?
     window.$eventBus.on('config:updated', (data) => {
-      window.$config.chat.active = data.chat.active;
-      window.$config.chat.position = data.chat.position;
-
-      window.$config.guests.active = data.guests.active;
-      window.$config.guests.position = data.guests.position;
-      window.$config.guests.showLatency = data.guests.showLatency;
-
-      window.$config.gamepads.active = data.gamepads.active;
-      window.$config.gamepads.position = data.gamepads.position;
-      window.$config.gamepads.showHotseat = data.gamepads.showHotseat;
+      window.$config = data;
+      this.config = null;
+      this.config = data;
     });
 
     window.$eventBus.on('opacity:increase', () => {

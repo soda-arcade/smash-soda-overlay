@@ -67,7 +67,9 @@ export default {
             setTimeout(() => {
                 (this.$refs['input-chat'] as HTMLElement).focus();
                 (this.$refs['panel-chat'] as HTMLElement).focus();
-                (this.$refs['panel-chat'] as HTMLElement).classList.add('panel');
+                if (window.$config.chat.showHistory) {
+                    (this.$refs['panel-chat'] as HTMLElement).classList.add('panel');
+                }
             }, 100);
         },
 

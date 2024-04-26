@@ -1,12 +1,12 @@
 <template lang="">
-    <div v-if="connectedPads.length > 0" id="widget-pads" class="widget panel">
-        <template class="pad-container" v-for="(pad, index) in pads" :key="index">
-            <div v-if="pad.index > -1" class="pad-container">
+    <div v-if="pads.length > 0" id="widget-pads" class="widget panel">
+        <template v-for="(pad, index) in pads" :key="index">
+            <div class="pad-container">
                 <GamepadSVG :ref="`pad-${pad.index}`" :id="pad.index" />
-                <div v-if="findOwnerByIndex(pad.index)" class="guest small">
-                    {{ truncateName(findOwnerByIndex(pad.index).guest.name, 10) }}
-                    <div v-if="!config.showHotseat && findOwnerByIndex(pad.index).hotseatTime > 0" class="muted">
-                        {{ hotseatTime(findOwnerByIndex(pad.index).hotseatTime) }}
+                <div v-if="pad.owner" class="guest small">
+                    {{ truncateName(pad.owner.name, 10) }}
+                    <div v-if="!config.showHotseat && pad.owner.hotseatTime != ''" class="muted">
+                        {{ pad.owner.hotseatTime }}
                     </div>
                 </div>
                 <div v-else class="muted small">
@@ -31,9 +31,6 @@ export default {
     computed: {
         config() {
             return window.$config.gamepads;
-        },
-        connectedPads() {
-            return this.pads.filter(pad => pad.index > -1);
         }
     },
     data() {
@@ -49,72 +46,6 @@ export default {
         }
     },
     methods: {
-
-        /**
-         * Set the owner of a pad
-         * @param index The index of the pad
-         * @param guest The guest to set as owner
-         */
-        setOwner(index: number, guest: User, hotseatTime: number = 0) {
-            // Find the pad
-            let pad = this.findPadByIndex(index);
-            if (pad) {
-                // Create owner object
-                let owner = {
-                    index: index,
-                    guest: guest,
-                    hotseatTime: hotseatTime,
-                    hotseatTimer: null
-                };
-
-                if (hotseatTime > 0) {
-                    owner.hotseatTimer = setInterval(() => {
-                        owner.hotseatTime--;
-                        if (owner.hotseatTime <= 0) {
-                            clearInterval(owner.hotseatTimer as any);
-                            this.clearOwner(guest.id);
-                        }
-                    }, 1000) as any;
-                }
-
-                this.owners.push(owner);
-            }
-        },
-
-        /**
-         * Clear the owner of a pad
-         * @param index The index of the pad
-         */
-        clearOwner(userID: string) {
-            // Find the owner
-            let owner = this.owners.find(owner => owner.guest.id === userID);
-            
-            if (owner) {
-
-                // Clear hotseat timer
-                if (owner.hotseatTimer) {
-                    clearInterval(owner.hotseatTimer);
-                }
-
-                this.owners.splice(this.owners.indexOf(owner), 1);
-            }
-        },
-
-        /**
-         * Find a pad's owner by its index
-         * @param index     The index of the pad
-         */
-        findOwnerByIndex(index: number) {
-            return this.owners.find(owner => owner.index === index);
-        },
-
-        /**
-         * Find a pad by its index
-         * @param index The index of the pad
-         */
-        findPadByIndex(index: number) {
-            return this.pads.find(pad => pad.index === index);
-        },
 
         /**
          * Truncate a guest's name
@@ -176,51 +107,54 @@ export default {
         /**
          * Update gamepads
          */
-        updateGamepads() {
-            let gamepads = navigator.getGamepads();
+        updateGamepads(gamepads: any[] = [] as any[]) {
             this.pads = gamepads.map((pad: any) => {
                 let guestPad = new GuestPad();
                 if (pad) {
                     guestPad.index = pad.index;
 
-                    // Update inputs
-                    this.setButtonState(pad.index, "ActionA", pad.buttons[0].pressed);
-                    this.setButtonState(pad.index, "ActionB", pad.buttons[1].pressed);
-                    this.setButtonState(pad.index, "ActionH", pad.buttons[2].pressed);
-                    this.setButtonState(pad.index, "ActionV", pad.buttons[3].pressed);
-                    this.setButtonState(pad.index, "MenuL", pad.buttons[8].pressed);
-                    this.setButtonState(pad.index, "MenuR", pad.buttons[9].pressed);
-                    this.setButtonState(pad.index, "BumperL", pad.buttons[4].pressed);
-                    this.setButtonState(pad.index, "BumperR", pad.buttons[5].pressed);
-                    this.setButtonState(pad.index, "TriggerL", pad.buttons[6].pressed);
-                    this.setButtonState(pad.index, "TriggerR", pad.buttons[7].pressed);
-                    this.setButtonState(pad.index, "Cam", pad.buttons[10].pressed);
-                    this.setButtonState(pad.index, "Joy", pad.buttons[11].pressed);
-                    
-                    this.setButtonState(pad.index, "Dpad", pad.buttons[12].pressed || pad.buttons[13].pressed || pad.buttons[14].pressed || pad.buttons[15].pressed);
+                    // If owner
+                    if (pad.owner) {
+                        guestPad.owner = pad.owner as User;
+                        guestPad.owner.hotseatTime = pad.hotseatTime;
+                    }
 
-                    this.setAxisState(pad.index, "lstick", pad.axes[0], pad.axes[1]);
-                    this.setAxisState(pad.index, "rstick", pad.axes[2], pad.axes[3]);
+                    // Update inputs
+                    this.setButtonState(pad.index, "ActionA", pad.buttons[0]);
+                    this.setButtonState(pad.index, "ActionB", pad.buttons[1]);
+                    this.setButtonState(pad.index, "ActionH", pad.buttons[2]);
+                    this.setButtonState(pad.index, "ActionV", pad.buttons[3]);
+                    this.setButtonState(pad.index, "MenuL", pad.buttons[8]);
+                    this.setButtonState(pad.index, "MenuR", pad.buttons[9]);
+                    this.setButtonState(pad.index, "BumperL", pad.buttons[4]);
+                    this.setButtonState(pad.index, "BumperR", pad.buttons[5]);
+                    this.setButtonState(pad.index, "TriggerL", pad.buttons[6]);
+                    this.setButtonState(pad.index, "TriggerR", pad.buttons[7]);
+                    this.setButtonState(pad.index, "Cam", pad.buttons[10]);
+                    this.setButtonState(pad.index, "Joy", pad.buttons[11]);
+                    
+                    this.setButtonState(pad.index, "Dpad", pad.buttons[12] || pad.buttons[13] || pad.buttons[14] || pad.buttons[15]);
+
+                    this.setAxisState(pad.index, "lstick", pad.axes[0], -pad.axes[1]);
+                    this.setAxisState(pad.index, "rstick", pad.axes[2], -pad.axes[3]);
 
                 }
                 return guestPad;
             });
+        },
+
+        updateInterval() {
+            this.gamepadInterval = setInterval(() => {
+                this.updateGamepads();
+            }, 1000 / 60);
         }
 
     },
     mounted() {
 
-        // Update gamepads
-        this.gamepadInterval = setInterval(this.updateGamepads, 1000/60);
-
-        // Listen for owner changes
-        window.$eventBus.on('gamepad:assign', (data: any) => {
-            if (data.owner) {
-                this.setOwner(data.index, new User(data.owner.id, data.owner.name), data.hotseatTime);
-            }
-        });
-        window.$eventBus.on('gamepad:unassign', (data: any) => {
-            this.clearOwner(data.index);
+        // Update gamepads realtime
+        window.$eventBus.on('gamepad:poll', (data: any) => {
+            this.updateGamepads(data.gamepads);
         });
 
     }

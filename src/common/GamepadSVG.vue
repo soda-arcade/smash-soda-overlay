@@ -180,7 +180,7 @@ export default defineComponent({
         hideBadge: {
             type: Boolean,
             required: false,
-            default: false
+            default: true
         },
         isLocked: {
             type: Boolean,

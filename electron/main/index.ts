@@ -81,8 +81,8 @@ async function createWindow() {
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       nodeIntegration: true,
       contextIsolation: true,
-      devTools: false,
-      backgroundThrottling: false
+      devTools: true,
+      backgroundThrottling: false,
     },
     width: width,
     height: height,
@@ -275,16 +275,16 @@ ipcMain.on('chat', (event: any, message: string) => {
 });
 
 // Toggle focus
-ipcMain.on('focus', () => {
-  win?.setIgnoreMouseEvents(false);
-  win?.focus();
-});
+// ipcMain.on('focus', () => {
+//   win?.setIgnoreMouseEvents(false);
+//   win?.focus();
+// });
 
-// Toggle blur
-ipcMain.on('blur', () => {
-  win?.setIgnoreMouseEvents(true);
-  win?.blur();
-});
+// // Toggle blur
+// ipcMain.on('blur', () => {
+//   win?.setIgnoreMouseEvents(true);
+//   win?.blur();
+// });
 
 /* ----------------------------------------- 
     INITIALIZATION
