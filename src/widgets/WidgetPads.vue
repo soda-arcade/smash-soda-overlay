@@ -87,7 +87,14 @@ export default {
         clearOwner(userID: string) {
             // Find the owner
             let owner = this.owners.find(owner => owner.guest.id === userID);
+            
             if (owner) {
+
+                // Clear hotseat timer
+                if (owner.hotseatTimer) {
+                    clearInterval(owner.hotseatTimer);
+                }
+
                 this.owners.splice(this.owners.indexOf(owner), 1);
             }
         },

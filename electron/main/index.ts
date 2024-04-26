@@ -81,31 +81,31 @@ async function createWindow() {
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       nodeIntegration: true,
       contextIsolation: true,
-      devTools: true,
+      devTools: false,
       backgroundThrottling: false
     },
     width: width,
-    // height: height,
-    // fullscreen: true,
-    // transparent: true,
-    // frame: false,
-    // show: false,
-    // skipTaskbar: true,
-    // titleBarStyle: 'hidden',
-    // autoHideMenuBar: true,
+    height: height,
+    fullscreen: true,
+    transparent: true,
+    frame: false,
+    show: false,
+    skipTaskbar: true,
+    titleBarStyle: 'hidden',
+    autoHideMenuBar: true,
   }) as BrowserWindow;
 
   // Always on top
-  // win.setPosition(0, 0);
-  // win.setAlwaysOnTop(true, "screen-saver");
-  // win.setVisibleOnAllWorkspaces(true);
-  // win.setFullScreenable(true);
-  // win.setMenuBarVisibility(false);
-  // win.maximize();
-  // win.show();
-  // win.setIgnoreMouseEvents(true);
-  // win.setKiosk(true);
-  // win.showInactive();
+  win.setPosition(0, 0);
+  win.setAlwaysOnTop(true, "screen-saver");
+  win.setVisibleOnAllWorkspaces(true);
+  win.setFullScreenable(true);
+  win.setMenuBarVisibility(false);
+  win.maximize();
+  win.show();
+  win.setIgnoreMouseEvents(true);
+  win.setKiosk(true);
+  win.showInactive();
 
   win.on('blur', () => {
     win.setBackgroundColor('#00000000');
