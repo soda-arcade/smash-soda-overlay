@@ -70,6 +70,7 @@ export default {
                 (this.$refs['panel-chat'] as HTMLElement).classList.add('panel');
             }, 100);
         },
+
         /**
          * Fired when the input is blurred
          */
@@ -78,6 +79,7 @@ export default {
             this.isFocused = false;
             (this.$refs['panel-chat'] as HTMLElement).classList.remove('panel');
         },
+        
         /**
          * Add a message to the chat
          * @param message The message to add
