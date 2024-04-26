@@ -275,16 +275,16 @@ ipcMain.on('chat', (event: any, message: string) => {
 });
 
 // Toggle focus
-// ipcMain.on('focus', () => {
-//   win?.setIgnoreMouseEvents(false);
-//   win?.focus();
-// });
+ipcMain.on('focus', () => {
+  win?.setIgnoreMouseEvents(false);
+  win?.focus();
+});
 
-// // Toggle blur
-// ipcMain.on('blur', () => {
-//   win?.setIgnoreMouseEvents(true);
-//   win?.blur();
-// });
+// Toggle blur
+ipcMain.on('blur', () => {
+  win?.setIgnoreMouseEvents(true);
+  win?.blur();
+});
 
 /* ----------------------------------------- 
     INITIALIZATION
