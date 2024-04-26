@@ -44,7 +44,8 @@ export default {
                 guest: User,
                 hotseatTime: number,
                 hotseatTimer: any
-            }[]
+            }[],
+            gamepadInterval: null as any
         }
     },
     methods: {
@@ -204,19 +205,18 @@ export default {
                 }
                 return guestPad;
             });
-            requestAnimationFrame(this.updateGamepads);
         }
 
     },
     mounted() {
 
         // Update gamepads
-        this.updateGamepads();
+        this.gamepadInterval = setInterval(this.updateGamepads, 1000/60);
 
         // Listen for owner changes
         window.$eventBus.on('gamepad:assign', (data: any) => {
             if (data.owner) {
-                this.setOwner(data.index, new User(data.owner.id, data.owner.name));
+                this.setOwner(data.index, new User(data.owner.id, data.owner.name), data.hotseatTime);
             }
         });
         window.$eventBus.on('gamepad:unassign', (data: any) => {

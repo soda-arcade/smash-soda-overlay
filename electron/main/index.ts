@@ -246,11 +246,14 @@ async function createServer() {
   });
 
   // Start connection timer
-  // setTimeout(() => {
-  //   if (!socket) {
-  //     app.quit();
-  //   }
-  // }, 10000);
+  // If the connection is not established within 30 seconds, Smash Soda
+  // will try to quit app, but this is in case a user launched the app
+  // without Smash Soda or if Smash Soda crashed
+  setTimeout(() => {
+    if (!socket) {
+      app.quit();
+    }
+  }, 30000);
 
 }
 
