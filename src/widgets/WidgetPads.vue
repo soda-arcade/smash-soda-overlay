@@ -108,10 +108,10 @@ export default {
          * Update gamepads
          */
         updateGamepads(gamepads: any[] = [] as any[]) {
-            this.pads = gamepads.map((pad: any) => {
+            this.pads = gamepads.map((pad: any, index: number) => {
                 let guestPad = new GuestPad();
                 if (pad) {
-                    guestPad.index = pad.index;
+                    guestPad.index = index;
 
                     // If owner
                     if (pad.owner) {
@@ -120,23 +120,23 @@ export default {
                     }
 
                     // Update inputs
-                    this.setButtonState(pad.index, "ActionA", pad.buttons[0]);
-                    this.setButtonState(pad.index, "ActionB", pad.buttons[1]);
-                    this.setButtonState(pad.index, "ActionH", pad.buttons[2]);
-                    this.setButtonState(pad.index, "ActionV", pad.buttons[3]);
-                    this.setButtonState(pad.index, "MenuL", pad.buttons[8]);
-                    this.setButtonState(pad.index, "MenuR", pad.buttons[9]);
-                    this.setButtonState(pad.index, "BumperL", pad.buttons[4]);
-                    this.setButtonState(pad.index, "BumperR", pad.buttons[5]);
-                    this.setButtonState(pad.index, "TriggerL", pad.buttons[6]);
-                    this.setButtonState(pad.index, "TriggerR", pad.buttons[7]);
-                    this.setButtonState(pad.index, "Cam", pad.buttons[10]);
-                    this.setButtonState(pad.index, "Joy", pad.buttons[11]);
+                    this.setButtonState(index, "ActionA", pad.buttons[0]);
+                    this.setButtonState(index, "ActionB", pad.buttons[1]);
+                    this.setButtonState(index, "ActionH", pad.buttons[2]);
+                    this.setButtonState(index, "ActionV", pad.buttons[3]);
+                    this.setButtonState(index, "MenuL", pad.buttons[8]);
+                    this.setButtonState(index, "MenuR", pad.buttons[9]);
+                    this.setButtonState(index, "BumperL", pad.buttons[4]);
+                    this.setButtonState(index, "BumperR", pad.buttons[5]);
+                    this.setButtonState(index, "TriggerL", pad.buttons[6]);
+                    this.setButtonState(index, "TriggerR", pad.buttons[7]);
+                    this.setButtonState(index, "Cam", pad.buttons[10]);
+                    this.setButtonState(index, "Joy", pad.buttons[11]);
                     
-                    this.setButtonState(pad.index, "Dpad", pad.buttons[12] || pad.buttons[13] || pad.buttons[14] || pad.buttons[15]);
+                    this.setButtonState(index, "Dpad", pad.buttons[12] || pad.buttons[13] || pad.buttons[14] || pad.buttons[15]);
 
-                    this.setAxisState(pad.index, "lstick", pad.axes[0], -pad.axes[1]);
-                    this.setAxisState(pad.index, "rstick", pad.axes[2], -pad.axes[3]);
+                    this.setAxisState(index, "lstick", pad.axes[0], -pad.axes[1]);
+                    this.setAxisState(index, "rstick", pad.axes[2], -pad.axes[3]);
 
                 }
                 return guestPad;

@@ -67,8 +67,9 @@ export default {
             setTimeout(() => {
                 (this.$refs['input-chat'] as HTMLElement).focus();
                 (this.$refs['panel-chat'] as HTMLElement).focus();
-                if (window.$config.chat.showHistory) {
-                    (this.$refs['panel-chat'] as HTMLElement).classList.add('panel');
+                (this.$refs['panel-chat'] as HTMLElement).classList.add('panel');
+                if (!window.$config.chat.showHistory) {
+                    (this.$refs['panel-chat'] as HTMLElement).classList.add('hide');
                 }
             }, 100);
         },
@@ -80,6 +81,7 @@ export default {
             window.electron.blur();
             this.isFocused = false;
             (this.$refs['panel-chat'] as HTMLElement).classList.remove('panel');
+            (this.$refs['panel-chat'] as HTMLElement).classList.remove('hide');
         },
         
         /**
@@ -169,6 +171,14 @@ export default {
             background: transparent;
             opacity: 1 !important;
         }
+    }
+
+    &.hide {
+        opacity: 0;
+        .message {
+            opacity: 1 !important;
+        }
+
     }
 }
 </style>
