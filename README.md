@@ -1,7 +1,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <h3 align="center">Smash Soda Overlay</h3>
+  <img src="github/logo.png"/>
+  <h3 align="center">
+  Smash Soda Overlay
+  </h3>
 
   <p align="center">
     Overlay application to accompany Smash Soda
@@ -34,7 +37,7 @@
 
 Here is the source code for the overlay application included with <a href="https://github.com/mickeyuk/SmashSoda">Smash Soda</a>. It has been developed with Electron. It is not intended to be run standalone, and won't work with <a href="https://github.com/v6ooo/ParsecSodaV">Parsec Soda V</a>'s Web Sockets widget.
 
-The source code is made public in case anybody wants to modify and compile for their own purposes (or contribute to the project!). The release builds will auto update
+The source code is made public in case anybody wants to modify and compile for their own purposes (or contribute to the project!).
 
 Issues and feature requests should be made in the <a href="https://github.com/MickeyUK/SmashSoda/issues">Smash Soda repository</a>.
 
@@ -73,34 +76,35 @@ Issues and feature requests should be made in the <a href="https://github.com/Mi
 
 ## Setup
 
-You will need <a href="https://nodejs.org/en/">Node.js</a> and <a href="https://gitforwindows.org/">Git</a> installed.
+The overlay is built in the <a href="https://wails.io/">Wails</a> framemwork. Follow their guide for setting up a development environment <a href="https://wails.io/docs/next/gettingstarted/installation">here</a>. (Note this overlay is compatible with Smash Soda version 6 onwards).
 
-Open a command terminal and navigate to where you'd like to store your project. Run the following commands:
+Once wails is installed, clone the project, cd in to the frontend subfolder, and install the node packages.
 
 ```
 git clone https://github.com/Smash-Soda-Team/smash-soda-overlay
-cd smash-soda-overlay
+cd smash-soda-overlay/frontend
 npm install
 ```
 
-To test the application:
+To run the overlay in dev mode:
 
 ```
-npm run dev
+wails dev
 ```
-
 
 To build the application:
 
 ```
-npm run build
+wails build
+```
+
+The overlay has a new theming system. You can put custom CSS files inside the themes folder alongside the built app, and select themes in Smash Soda. When developing a theme, you can run the overlay in "design mode". This will stop the overlay from trying to connect to Smash Soda and display some placeholder widgets on the overlay:
+
+```
+wails dev -appargs design
 ```
 
 ----
-
-Here are some basic pointers for editing the source code for your own custom uses.
-
-The project uses [Sass](https://sass-lang.com/) for building the stylesheet, and has been configured to work with [Visual Studio Code](https://code.visualstudio.com/) and the ```Live Sass Compiler``` extension by ```Ritwick Dey```.
 
 Socket messages from Smash Soda to come in this JSON format:
 ```json
