@@ -14,11 +14,23 @@ Of course, this is just my advice...go nuts. :D
 
 - Mickey
 */
+
+/*
+You can import fonts from Google Fonts here.
+https://fonts.google.com/
+*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/*
+Global styles for the overlay
+*/
 :root {
   --color-primary: #131313;
   --color-secondary: #edf2f4;
   --color-tertiary: #f3c623;
   --color-quaternary: #c4c4c4;
+
+  --font-primary: 'Roboto', sans-serif;
 }
 
 /*
@@ -33,7 +45,7 @@ The "app" is the entire overlay, and should be
 styled to fit the screen, and apply any global styles.
 */
 #app {
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font-primary);
   font-size: 14px;
   position: relative;
   padding: 10px;
@@ -100,7 +112,7 @@ Spacing for rows and columns.
 The text chat input.
 */
 .chat-input {
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font-primary);
   background: var(--color-primary);
   color: var(--color-secondary);
   border: 1px solid transparent;

@@ -25,6 +25,8 @@
       <a href="#about-the-project">About The Project</a>
     </li>
     <li><a href="#setup">Setup</a></li>
+    <li><a href="#custom-themes">Custom Themes</a></li>
+    <li><a href="#obs">OBS</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -35,7 +37,7 @@
 
 ## About the Project
 
-Here is the source code for the overlay application included with <a href="https://github.com/mickeyuk/SmashSoda">Smash Soda</a>. It has been developed with Electron. It is not intended to be run standalone, and won't work with <a href="https://github.com/v6ooo/ParsecSodaV">Parsec Soda V</a>'s Web Sockets widget.
+Here is the source code for the overlay application included with <a href="https://github.com/mickeyuk/SmashSoda">Smash Soda</a>. It has been developed with Electron. It is not intended to be run standalone, and won't work with <a href="https://github.com/v6ooo/ParsecSodaV">Parsec Soda V</a>'s Web Sockets widget. The overlay uses <a href="https://developer.microsoft.com/en-gb/microsoft-edge/webview2/?form=MA13LH">WebView2</a>.
 
 The source code is made public in case anybody wants to modify and compile for their own purposes (or contribute to the project!).
 
@@ -98,12 +100,6 @@ To build the application:
 wails build
 ```
 
-The overlay has a new theming system. You can put custom CSS files inside the themes folder alongside the built app, and select themes in Smash Soda. When developing a theme, you can run the overlay in "design mode". This will stop the overlay from trying to connect to Smash Soda and display some placeholder widgets on the overlay:
-
-```
-wails dev -appargs design
-```
-
 ----
 
 Socket messages from Smash Soda to come in this JSON format:
@@ -119,6 +115,20 @@ window.$eventBus.on('event name', (data: any) => {
   // Do thing
 });
 ```
+
+## Custom Themes
+
+The overlay has a new theming system. You can put custom CSS files inside the themes folder alongside the built app, and select themes in Smash Soda. When developing a theme, you can run the overlay in "design mode". This will stop the overlay from trying to connect to Smash Soda and display some placeholder widgets on the overlay:
+
+```
+wails dev -appargs design
+```
+
+## OBS
+
+The Smash Soda overlay application is primarily intended for users who want to see details about their room at all times and only have one monitor. For those wishing to build their own OBS overlays, it's as simple as connecting to the websocket server that Smash Soda creates when hosting, and then displaying the info how you want.
+
+Check out the obs_example.html for a very basic example of how to make a static HTML with vanilla JavaScript, to render data from Smash Soda.
 
 ## Contributing
 

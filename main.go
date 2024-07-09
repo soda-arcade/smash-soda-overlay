@@ -472,8 +472,41 @@ func main() {
 									}
 									return
 								}
-								fmt.Printf("Received message: %v\n", string(message))
-								runtime.EventsEmit(ctx, "app:socket", string(message))
+
+								// If message was app:config
+								if string(message) == "app:config" {
+									runtime.EventsEmit(ctx, "app:config", config)
+									var success bool
+									config, success = readConfig()
+									if !success {
+										fmt.Println("Failed to read config")
+									}
+
+									// Get initial theme
+									themeContent := ""
+									if success {
+										themeError := error(nil)
+										theme, ok := getProp("Overlay", "theme")
+										if ok {
+											themeName := theme.(string)
+											themeContent, themeError = getThemeContent(themeName)
+											if themeError != nil {
+												fmt.Println(themeError)
+											}
+										}
+									}
+
+									// Update frontend with config
+									runtime.EventsEmit(ctx, "app:config", map[string]interface{}{
+										"config": config,
+										"theme":  themeContent,
+									})
+									fmt.Println("Sent config to frontend")
+
+								} else {
+									runtime.EventsEmit(ctx, "app:socket", string(message))
+									fmt.Printf("Received message: %v\n", string(message))
+								}
 							}
 						}()
 
@@ -503,7 +536,7 @@ func main() {
 			ZoomFactor:                        1.0,
 		},
 		Debug: options.Debug{
-			OpenInspectorOnStartup: true,
+			OpenInspectorOnStartup: false,
 		},
 	})
 

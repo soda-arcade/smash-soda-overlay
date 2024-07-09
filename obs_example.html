@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+	// Here you can handle data from Smash Soda
+	function onMessage(event, data) {
+		console.log(event, data);
+	}
+
+    // An extremely basic starter template for making OBS overlays
+    window.addEventListener("load", function() {
+        
+        // Connect to Smash Soda and start listening for messages
+        var socket = new WebSocket("ws://localhost:9002");
+        socket.onmessage = function (event) {
+			var data = JSON.parse(event.data);
+			onMessage(data.event, data.data);
+        };
+		
+    });
+</script>
+<style>
+</style>
+</head>
+<body>
+    <!-- Render data however you want! -->
+</body>
+</html>

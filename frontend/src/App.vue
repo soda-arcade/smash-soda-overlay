@@ -6,7 +6,7 @@
   </div>
 </template>
 <script lang="ts">
-import { EventsEmit } from '../wailsjs/runtime/runtime';
+import { EventsOn, EventsEmit } from '../wailsjs/runtime/runtime';
 
 import WidgetChat from '@/widgets/WidgetChat.vue';
 import WidgetGuests from '@/widgets/WidgetGuests.vue';
@@ -27,7 +27,10 @@ export default {
   },
   methods: {
   },
+  computed: {
+  },
   mounted() {
+
   }
 }
 </script>

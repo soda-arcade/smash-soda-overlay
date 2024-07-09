@@ -21,13 +21,9 @@ export default {
             default: 'bottom left'
         }
     },
-    computed: {
-        config() {
-            return window.$config.guests;
-        }
-    },
     data: () => ({
-        users: [] as User[]
+        users: [] as User[],
+        config: window.$config.guests
     }),
     methods: {
         /**
@@ -54,6 +50,10 @@ export default {
         }
     },
     mounted() {
+
+        window.$eventBus.on('config:updated', () => {
+            this.config = window.$config.guests;
+        });
 
         // If design mode create some test users
         if (window.$designMode) {         

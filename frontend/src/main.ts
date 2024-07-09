@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from '@/App.vue';
 import Config from '@/models/Config';
 import { EventsOn, EventsEmit } from '../wailsjs/runtime/runtime';
+import DOMPurify from 'dompurify';
 import '@/css/main.css';
 
 // Event bus
@@ -12,8 +13,6 @@ window.$eventBus = mitt();
 let opacityLevel = 1;           // Opacity of the overlay
 let zoomLevel = 1;              // Zoom level of the overlay
 window.$designMode = false;     // Disables websocket and shows preview
-window.$config = new Config();  // Smash Soda overlay config
-window.$customCSS = '';         // Custom CSS loaded from active theme file
 
 /**
  * Set default settings when document is ready,
@@ -22,16 +21,15 @@ window.$customCSS = '';         // Custom CSS loaded from active theme file
 EventsOn('app:start', (data: any) => {
 
     // Set default settings
-    window.$config = data.config.Overlay;
+    window.$config = data.config.Overlay as Config;
     window.$designMode = data.designMode;
-    window.$customCSS = data.theme;
-
-    // Set custom theme
+    
+    // Set custom CSS
     const style = document.getElementById('custom-css');
     if (style) {
-      style.innerHTML = window.$customCSS;
+        style.innerHTML = DOMPurify.sanitize(data.theme);
     }
-
+    
     // Set zoom level
     document.getElementById('app').style.zoom = `${zoomLevel}`;
 
@@ -40,8 +38,20 @@ EventsOn('app:start', (data: any) => {
     document.getElementById('app').style.opacity = `${opacityLevel}`;
 
     // Create Vue app
-    createApp(App).mount('#app');
+    createApp(App)
+    .mount('#app');
 
+});
+
+// On config update
+EventsOn('app:config', (data: any) => {
+    window.$config = data.config.Overlay as Config;
+    window.$eventBus.emit('config:updated');
+
+    const style = document.getElementById('custom-css');
+    if (style) {
+        style.innerHTML = DOMPurify.sanitize(data.theme);
+    }
 });
 
 /**
@@ -83,29 +93,4 @@ window.$eventBus.on('opacity:in', () => {
 window.$eventBus.on('opacity:out', () => {
     opacityLevel = Math.max(0.1, opacityLevel - 0.1);
     document.getElementById('app').style.opacity = `${opacityLevel}`;
-});
-
-/**
- * Listen for Smash Soda config changes
- */
-window.$eventBus.on('app:config', (data: any) => {
-
-    // Was overlay theme changed?
-    if (window.$config.theme !== data.config.Overlay.theme) {
-        EventsEmit('app:theme', data.config.Overlay.theme);
-    }
-
-    // Update config
-    window.$config = data.config;
-
-});
-
-/**
- * Listen for Smash Soda theme changes
- */
-window.$eventBus.on('app:theme', (theme: string) => {
-    const style = document.getElementById('custom-css');
-    if (style) {
-      style.innerHTML = window.$customCSS;
-    }
 });

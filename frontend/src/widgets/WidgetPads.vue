@@ -22,6 +22,7 @@ import GamepadSVG from '@/common/GamepadSVG.vue';
 
 import User from '@/models/User';
 import GuestPad from '@/models/GuestPad';
+import { config } from 'process';
 
 export default {
     name: 'WidgetPads',
@@ -29,15 +30,13 @@ export default {
         GamepadSVG
     },
     computed: {
-        config() {
-            return window.$config.gamepads;
-        },
         showHotseat() {
             return this.config.showHotseat || window.$designMode;
         }
     },
     data() {
         return {
+            config: window.$config.gamepads,
             pads: [] as GuestPad[],
             owners: [] as {
                 index: number,
@@ -149,6 +148,10 @@ export default {
     },
     mounted() {
 
+        window.$eventBus.on('config:updated', () => {
+            this.config = window.$config.gamepads;
+        });
+
         // Update gamepads realtime
         window.$eventBus.on('gamepad:poll', (data: any) => {
             this.updateGamepads(data.gamepads);
@@ -190,7 +193,6 @@ export default {
                 this.setButtonState(1, "Dpad", !this.pads[0].buttons[12]);
 
                 this.setAxisState(1, "lstick", Math.random(), Math.random());
-                //this.setAxisState(1, "rstick", Math.random(), Math.random());
             }, 1000);
 
         }

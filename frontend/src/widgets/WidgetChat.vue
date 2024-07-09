@@ -38,6 +38,7 @@ export default {
         ChatMessage
     },
     data: () => ({
+        config: window.$config.chat,
         messages: [] as (Message)[],
         bubbles: [] as (Message)[],
         isFocused: false
@@ -46,11 +47,8 @@ export default {
         messagesLimited() {
             return this.messages.slice(0, 100);
         },
-        config() {
-            return window.$config.chat;
-        },
         historyEnabled() {
-            return (this.config.showHistory && this.isFocused) || window.$designMode;
+            return (this.showHistory && this.isFocused) || window.$designMode;
         }
     },
     methods: {
@@ -144,6 +142,10 @@ export default {
         }
     },
     mounted() {
+
+        window.$eventBus.on('config:updated', () => {
+            this.config = window.$config.chat;
+        });
 
         // Add some initial messages if in design mode
         if (window.$designMode) {

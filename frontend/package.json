@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@types/jquery": "^3.5.29",
+    "dompurify": "^3.1.6",
     "jquery": "^3.7.1",
     "mitt": "^3.0.1",
     "path": "^0.12.7",
