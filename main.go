@@ -102,6 +102,9 @@ func toggleClickThrough() {
 
 // Set the window to be click-through
 func focus() {
+	if designMode {
+		return
+	}
 	exStyle := win.GetWindowLong(hwnd, win.GWL_EXSTYLE)
 	exStyle &^= win.WS_EX_TRANSPARENT
 	win.SetWindowLong(hwnd, win.GWL_EXSTYLE, exStyle)
@@ -109,6 +112,9 @@ func focus() {
 
 // Set the window to be interactable
 func blur() {
+	if designMode {
+		return
+	}
 	exStyle := win.GetWindowLong(hwnd, win.GWL_EXSTYLE)
 	exStyle |= win.WS_EX_TRANSPARENT
 	win.SetWindowLong(hwnd, win.GWL_EXSTYLE, exStyle)
