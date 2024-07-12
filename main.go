@@ -102,9 +102,6 @@ func toggleClickThrough() {
 
 // Set the window to be click-through
 func focus() {
-	if designMode {
-		return
-	}
 	exStyle := win.GetWindowLong(hwnd, win.GWL_EXSTYLE)
 	exStyle &^= win.WS_EX_TRANSPARENT
 	win.SetWindowLong(hwnd, win.GWL_EXSTYLE, exStyle)
@@ -112,9 +109,6 @@ func focus() {
 
 // Set the window to be interactable
 func blur() {
-	if designMode {
-		return
-	}
 	exStyle := win.GetWindowLong(hwnd, win.GWL_EXSTYLE)
 	exStyle |= win.WS_EX_TRANSPARENT
 	win.SetWindowLong(hwnd, win.GWL_EXSTYLE, exStyle)
@@ -128,12 +122,11 @@ func startup(ctx context.Context) {
 	if !designMode {
 		exStyle &^= win.WS_EX_APPWINDOW
 	}
+
 	win.SetWindowLong(hwnd, win.GWL_EXSTYLE, exStyle)
 
 	// Set the window to be click-through
-	if !designMode {
-		toggleClickThrough()
-	}
+	toggleClickThrough()
 
 	// Set window position
 	if monitor, ok := getProp("Overlay", "monitor"); ok {
@@ -383,9 +376,11 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:            "smash-soda-overlay",
-		Frameless:        !designMode,
-		WindowStartState: options.Maximised,
+		Fullscreen:       true,
+		Frameless:        true,
+		WindowStartState: options.Fullscreen,
 		AlwaysOnTop:      true,
+		DisableResize:    true,
 		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
 		AssetServer: &assetserver.Options{
 			Assets: assets,

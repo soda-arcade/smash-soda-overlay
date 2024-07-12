@@ -41,14 +41,15 @@ export default {
         config: window.$config.chat,
         messages: [] as (Message)[],
         bubbles: [] as (Message)[],
-        isFocused: false
+        isFocused: false,
+        bubbleTimeout: 5000
     }),
     computed: {
         messagesLimited() {
             return this.messages.slice(0, 100);
         },
         historyEnabled() {
-            return (this.showHistory && this.isFocused) || window.$designMode;
+            return (this.config.showHistory && this.isFocused) || window.$designMode;
         }
     },
     methods: {
@@ -89,7 +90,8 @@ export default {
             this.isFocused = true;
             EventsEmit('app:focus');
             setTimeout(() => {
-                this.$refs['input-chat'].focus();
+                this.$refs['input-chat']?.focus();
+                this.$refs['input-chat']?.focus();
             }, 100);
         },
 
@@ -123,8 +125,7 @@ export default {
                 message.type,
                 message.user
             ));
-
-            // Give the bubble a timeout
+            
             setTimeout(() => {
                 const bubble = this.bubbles.find(b => b.id === id);
                 if (bubble) {
@@ -139,6 +140,22 @@ export default {
             // Clear the input
             this.$refs['input-chat'].value = '';
 
+        },
+
+        findCSSRule(className, property) {
+            const sheets = document.styleSheets;
+            for (let i = 0; i < sheets.length; i++) {
+                const rules = sheets[i].cssRules || sheets[i].rules;
+                for (let j = 0; j < rules.length; j++) {
+                    const rule = rules[j] as CSSStyleRule;
+                    if (rule.selectorText && rule.selectorText.includes(className)) {
+                        if (rule.style && rule.style[property] !== undefined) {
+                            return rule.style[property];
+                        }
+                    }
+                }
+            }
+            return null;
         }
     },
     mounted() {
