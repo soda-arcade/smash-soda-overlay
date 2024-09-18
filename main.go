@@ -31,6 +31,7 @@ var assets embed.FS
 var hwnd win.HWND
 var config map[string]interface{}
 var designMode bool
+var inspector bool
 var monitors []*glfw.Monitor
 var cssThemes map[string]string
 var isClickThrough bool
@@ -360,6 +361,9 @@ func main() {
 		if arg == "design" {
 			designMode = true
 		}
+		if arg == "inspector" {
+			inspector = true
+		}
 	}
 
 	// Read the config file
@@ -502,11 +506,11 @@ func main() {
 										"config": config,
 										"theme":  themeContent,
 									})
-									fmt.Println("Sent config to frontend")
+									//fmt.Println("Sent config to frontend")
 
 								} else {
 									runtime.EventsEmit(ctx, "app:socket", string(message))
-									fmt.Printf("Received message: %v\n", string(message))
+									//fmt.Printf("Received message: %v\n", string(message))
 								}
 							}
 						}()
@@ -537,7 +541,7 @@ func main() {
 			ZoomFactor:                        1.0,
 		},
 		Debug: options.Debug{
-			OpenInspectorOnStartup: false,
+			OpenInspectorOnStartup: inspector,
 		},
 	})
 

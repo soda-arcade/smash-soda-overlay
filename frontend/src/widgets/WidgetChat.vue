@@ -1,5 +1,5 @@
 <template lang="">
-    <div id="widget-chat" class="widget col" :class="config.position">
+    <div id="widget-chat" class="widget col" :class="`${config.position} ${config.active ? '' : 'hidden'}`">
         <input 
         ref="input-chat" 
         class="chat-input"

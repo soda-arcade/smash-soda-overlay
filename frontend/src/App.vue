@@ -6,8 +6,6 @@
   </div>
 </template>
 <script lang="ts">
-import { EventsOn, EventsEmit } from '../wailsjs/runtime/runtime';
-
 import WidgetChat from '@/widgets/WidgetChat.vue';
 import WidgetGuests from '@/widgets/WidgetGuests.vue';
 import WidgetPads from '@/widgets/WidgetPads.vue';
@@ -23,6 +21,7 @@ export default {
     return {
       zoomLevel: 1,
       opacity: 1,
+      config: window.$config
     }
   },
   methods: {

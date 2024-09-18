@@ -1,5 +1,5 @@
 <template lang="">
-    <div v-if="pads.length > 0" id="widget-pads" class="widget panel" :class="config.position">
+    <div v-if="pads.length > 0" id="widget-pads" class="widget panel" :class="`${config.position} ${config.active ? '' : 'hidden'}`">
         <template v-for="(pad, index) in pads" :key="index">
             <div class="pad-container">
                 <GamepadSVG :ref="`pad-${pad.index}`" :id="pad.index" />
@@ -22,7 +22,6 @@ import GamepadSVG from '@/common/GamepadSVG.vue';
 
 import User from '@/models/User';
 import GuestPad from '@/models/GuestPad';
-import { config } from 'process';
 
 export default {
     name: 'WidgetPads',
@@ -150,6 +149,7 @@ export default {
 
         window.$eventBus.on('config:updated', () => {
             this.config = window.$config.gamepads;
+            console.log(this.config.active);
         });
 
         // Update gamepads realtime
@@ -201,4 +201,5 @@ export default {
 }
 </script>
 <style lang="scss">
+
 </style>

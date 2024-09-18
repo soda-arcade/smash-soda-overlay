@@ -47,6 +47,7 @@ EventsOn('app:start', (data: any) => {
 EventsOn('app:config', (data: any) => {
     window.$config = data.config.Overlay as Config;
     window.$eventBus.emit('config:updated');
+    console.log('Config updated:', window.$config);
 
     const style = document.getElementById('custom-css');
     if (style) {

@@ -1,5 +1,5 @@
 <template lang="">
-    <div v-if="users.length > 0" id="widget-guests" class="widget panel col" :class="config.position">
+    <div v-if="users.length > 0" id="widget-guests" class="widget panel col" :class="`${config.position} ${config.active ? '' : 'hidden'}`">
         <div v-for="user in users" class="row space-between">
             <div class="guest">
                 {{ user.truncateName(15) }}
