@@ -137,9 +137,6 @@ export default {
                 }
             }, 5000);
 
-            // Clear the input
-            this.$refs['input-chat'].value = '';
-
         },
 
         findCSSRule(className, property) {

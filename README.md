@@ -124,6 +124,12 @@ The overlay has a new theming system. You can put custom CSS files inside the th
 wails dev -appargs design
 ```
 
+You can display the inspector in dev mode by passing the inspector argument:
+
+```
+wails dev -appargs inspector
+```
+
 ## OBS
 
 The Smash Soda overlay application is primarily intended for users who want to see details about their room at all times and only have one monitor. For those wishing to build their own OBS overlays, it's as simple as connecting to the websocket server that Smash Soda creates when hosting, and then displaying the info how you want.
