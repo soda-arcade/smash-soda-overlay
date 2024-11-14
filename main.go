@@ -14,7 +14,6 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
-	"golang.design/x/hotkey"
 
 	"context"
 	"encoding/json"
@@ -23,19 +22,22 @@ import (
 	"os"
 	"path/filepath"
 	"syscall"
+
+	"smash-soda-overlay/backend"
 )
 
 //go:embed frontend/dist
 var assets embed.FS
 
-var hwnd win.HWND
-var config map[string]interface{}
-var designMode bool
-var inspector bool
-var monitors []*glfw.Monitor
-var cssThemes map[string]string
-var isClickThrough bool
-var conn *websocket.Conn
+var (
+	hwnd           win.HWND
+	config         map[string]interface{}
+	designMode     bool
+	inspector      bool
+	localServer    bool
+	isClickThrough bool
+	conn           *websocket.Conn
+)
 
 func readConfig() (map[string]interface{}, bool) {
 	// Get the %appdata% directory
@@ -173,11 +175,9 @@ func startup(ctx context.Context) {
 	// Register hotkeys
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	go registerChatHotkey(ctx)
-	go registerZoomInHotkey(ctx)
-	go registerZoomOutHotkey(ctx)
-	go registerOpacityInHotkey(ctx)
-	go registerOpacityOutHotkey(ctx)
+
+	// Register hotkeys
+	backend.RegisterHotkeys(ctx)
 
 }
 
@@ -233,102 +233,6 @@ func getThemeContent(themeName string) (string, error) {
 	return string(content), nil
 }
 
-func registerChatHotkey(ctx context.Context) {
-
-	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyC)
-	err := hk.Register()
-	if err != nil {
-		return
-	}
-
-	<-hk.Keydown()
-	fmt.Printf("hotkey: %v is down\n", hk)
-
-	runtime.WindowShow(ctx)
-	runtime.EventsEmit(ctx, "app:shortcut", "chat:input")
-
-	hk.Unregister()
-
-	registerChatHotkey(ctx)
-
-}
-
-func registerZoomInHotkey(ctx context.Context) {
-
-	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.Key(0xBB))
-	err := hk.Register()
-	if err != nil {
-		return
-	}
-
-	<-hk.Keydown()
-	fmt.Printf("hotkey: %v is down\n", hk)
-
-	runtime.EventsEmit(ctx, "app:shortcut", "zoom:in")
-
-	hk.Unregister()
-
-	registerZoomInHotkey(ctx)
-
-}
-
-func registerZoomOutHotkey(ctx context.Context) {
-
-	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.Key(0xBD))
-	err := hk.Register()
-	if err != nil {
-		return
-	}
-
-	<-hk.Keydown()
-	fmt.Printf("hotkey: %v is down\n", hk)
-
-	runtime.EventsEmit(ctx, "app:shortcut", "zoom:out")
-
-	hk.Unregister()
-
-	registerZoomOutHotkey(ctx)
-
-}
-
-func registerOpacityInHotkey(ctx context.Context) {
-
-	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyUp)
-	err := hk.Register()
-	if err != nil {
-		return
-	}
-
-	<-hk.Keydown()
-	fmt.Printf("hotkey: %v is down\n", hk)
-
-	runtime.EventsEmit(ctx, "app:shortcut", "opacity:in")
-
-	hk.Unregister()
-
-	registerOpacityInHotkey(ctx)
-
-}
-
-func registerOpacityOutHotkey(ctx context.Context) {
-
-	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyDown)
-	err := hk.Register()
-	if err != nil {
-		return
-	}
-
-	<-hk.Keydown()
-	fmt.Printf("hotkey: %v is down\n", hk)
-
-	runtime.EventsEmit(ctx, "app:shortcut", "opacity:out")
-
-	hk.Unregister()
-
-	registerOpacityOutHotkey(ctx)
-
-}
-
 // Send string to Smash Soda
 func sendMessage(message string) {
 	if !designMode && conn != nil {
@@ -364,6 +268,10 @@ func main() {
 		if arg == "inspector" {
 			inspector = true
 		}
+		if arg == "server" {
+			localServer = true
+		}
+		fmt.Println("Argument:", arg)
 	}
 
 	// Read the config file
@@ -389,8 +297,21 @@ func main() {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		OnStartup: startup,
+		OnStartup: func(ctx context.Context) {
+
+			backend.Ctx = ctx
+
+			// Start the application
+			startup(ctx)
+
+		},
 		OnDomReady: func(ctx context.Context) {
+
+			// Start the websocket server
+			backend.Ctx = ctx
+			if localServer {
+				go backend.StartServer()
+			}
 
 			// Get initial theme
 			themeContent := ""
@@ -442,7 +363,7 @@ func main() {
 			})
 
 			// Start a goroutine to continuously read messages from the WebSocket server
-			if !designMode {
+			if !designMode && !localServer {
 
 				// Connect to Smash Soda
 				if port, ok := getProp("Socket", "port"); ok {
@@ -526,6 +447,9 @@ func main() {
 			fmt.Println("Shutting down")
 			if conn != nil {
 				conn.Close()
+			}
+			if localServer {
+				backend.StopServer()
 			}
 		},
 		Bind: []interface{}{

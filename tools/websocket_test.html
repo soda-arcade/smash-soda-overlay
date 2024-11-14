@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Websocket Test</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.36.4/css/ace.min.css" rel="stylesheet">
+    <style>
+        #editor {
+            width: 400px;
+            height: 200px;
+            border: 1px solid #d1d1d1;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Tester</h1>
+    <button id="openBtn">Open Connection</button>
+    <button id="closeBtn">Close Connection</button>
+    <br><br>
+    <div id="editor"></div>
+    <br><br>
+    <button id="sendBtn">Send Message</button>
+    <br><br>
+    <pre id="output"></pre>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.4/ace.js"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+    </script>
+    <script>
+        let socket;
+
+        document.getElementById('openBtn').addEventListener('click', () => {
+            socket = new WebSocket('ws://localhost:8080/ws');
+
+            socket.onopen = () => {
+                document.getElementById('output').innerText = 'Connection opened';
+            };
+
+            socket.onmessage = (event) => {
+                document.getElementById('output').innerText += '\nReceived: ' + event.data;
+            };
+
+            socket.onclose = () => {
+                document.getElementById('output').innerText += '\nConnection closed';
+            };
+
+            socket.onerror = (error) => {
+                document.getElementById('output').innerText += '\nError: ' + error.message;
+            };
+        });
+
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            if (socket) {
+                socket.close();
+            }
+        });
+
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            let message = editor.getValue();
+            message = message.replace(/\s+/g, ' ');
+            console.log(message);
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(message);
+            } else {
+                console.log('Connection is not open');
+            }
+        });
+    </script>
+</body>
+</html>

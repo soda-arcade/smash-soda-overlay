@@ -68,7 +68,9 @@ EventsOn('app:shortcut', (data: any) => {
  * to the event bus.
  */
 EventsOn('app:socket', (json: any) => {
+    console.log('Socket event:', json);
     const data = JSON.parse(json);
+    console.log('Socket event:', data);
     window.$eventBus.emit(data.event, data.data);
 });
 

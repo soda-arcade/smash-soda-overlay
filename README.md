@@ -25,7 +25,7 @@
       <a href="#about-the-project">About The Project</a>
     </li>
     <li><a href="#setup">Setup</a></li>
-    <li><a href="#custom-themes">Custom Themes</a></li>
+    <li><a href="#testing">Testing</a></li>
     <li><a href="#obs">OBS</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -116,7 +116,7 @@ window.$eventBus.on('event name', (data: any) => {
 });
 ```
 
-## Custom Themes
+## Testing
 
 The overlay has a new theming system. You can put custom CSS files inside the themes folder alongside the built app, and select themes in Smash Soda. When developing a theme, you can run the overlay in "design mode". This will stop the overlay from trying to connect to Smash Soda and display some placeholder widgets on the overlay:
 
@@ -124,10 +124,28 @@ The overlay has a new theming system. You can put custom CSS files inside the th
 wails dev -appargs design
 ```
 
-You can display the inspector in dev mode by passing the inspector argument:
+You can display the browser inspector in dev mode by passing the inspector argument:
 
 ```
 wails dev -appargs inspector
+```
+
+The overlay has a built in websocket server if you have your own testing setup for the websocket messages:
+
+```
+wails dev -appargs server
+```
+
+The server is served at:
+
+```
+ws://localhost:8080/ws
+```
+
+When providing multiple arguments, put inside quotes:
+
+```
+wails dev -appargs "design inspector server"
 ```
 
 ## OBS
@@ -135,6 +153,10 @@ wails dev -appargs inspector
 The Smash Soda overlay application is primarily intended for users who want to see details about their room at all times and only have one monitor. For those wishing to build their own OBS overlays, it's as simple as connecting to the websocket server that Smash Soda creates when hosting, and then displaying the info how you want.
 
 Check out the obs_example.html for a very basic example of how to make a static HTML with vanilla JavaScript, to render data from Smash Soda.
+
+Here is a static web page template for displaying your Parsec room chat in OBS...it'll also broadcast display Twitch chat in your Parsec room!
+
+[https://github.com/soda-arcade/twitch-overlay-widget](https://github.com/soda-arcade/twitch-overlay-widget)
 
 ## Contributing
 
