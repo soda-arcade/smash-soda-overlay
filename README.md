@@ -24,7 +24,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="#setup">Setup</a></li>
+    <li><a href="#Setup Development Environment">Setup Development Environment</a></li>
     <li><a href="#testing">Testing</a></li>
     <li><a href="#obs">OBS</a></li>
     <li><a href="#contributing">Contributing</a></li>
@@ -37,7 +37,7 @@
 
 ## About the Project
 
-Here is the source code for the overlay application included with <a href="https://github.com/mickeyuk/SmashSoda">Smash Soda</a>. It has been developed with Electron. It is not intended to be run standalone, and won't work with <a href="https://github.com/v6ooo/ParsecSodaV">Parsec Soda V</a>'s Web Sockets widget. The overlay uses <a href="https://developer.microsoft.com/en-gb/microsoft-edge/webview2/?form=MA13LH">WebView2</a>.
+Here is the source code for the overlay application included with <a href="https://github.com/mickeyuk/SmashSoda">Smash Soda</a>. It has been developed with <a href="https://wails.io/">Wails</a>. It is not intended to be run standalone, and won't work with <a href="https://github.com/v6ooo/ParsecSodaV">Parsec Soda V</a>'s Web Sockets widget. The overlay uses <a href="https://developer.microsoft.com/en-gb/microsoft-edge/webview2/?form=MA13LH">WebView2</a>. Instructions for using the overlay with Smash Soda can be found <a href="https://github.com/soda-arcade/smash-soda/wiki/overlay">here</a>.
 
 The source code is made public in case anybody wants to modify and compile for their own purposes (or contribute to the project!).
 
@@ -76,7 +76,7 @@ Issues and feature requests should be made in the <a href="https://github.com/Mi
     </tr>
 </table>
 
-## Setup
+## Setup Development Environment
 
 The overlay is built in the <a href="https://wails.io/">Wails</a> framemwork. Follow their guide for setting up a development environment <a href="https://wails.io/docs/next/gettingstarted/installation">here</a>. (Note this overlay is compatible with Smash Soda version 6 onwards).
 
